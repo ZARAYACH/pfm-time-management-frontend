@@ -78,7 +78,7 @@ jobs:
       - name: Run openapi
         run: ${{ steps.detect-package-manager.outputs.runner }} npm run openapi
       - name: Build with Next.js
-        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        run: ${{ steps.detect-package-manager.outputs.runner }} npm run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

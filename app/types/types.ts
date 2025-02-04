@@ -15,7 +15,7 @@ export type User = {
   };
   
   export type Module = {
-    id: string;
+    id: number;
     name: string;
     semester: string;
     //teacherId: string;

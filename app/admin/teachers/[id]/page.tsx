@@ -1,12 +1,13 @@
 "use client"
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import {use, useEffect, useState} from 'react';
 import { Teacher } from '@/app/types/types';
 
-function TeacherDetails({ params }: { params: { id: string } }) {
+function TeacherDetails({params}: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const [teacher, setTeacher] = useState<Teacher | null>(null);
   const [loading, setLoading] = useState(true);
+  const props = use(params);
 
   // Données mockées
   const mockTeachers: Teacher[] = [
@@ -15,15 +16,15 @@ function TeacherDetails({ params }: { params: { id: string } }) {
   ];
 
   useEffect(() => {
-    if (params.id) {
+    if (props.id) {
       // Simuler un délai de chargement
       setTimeout(() => {
-        const foundTeacher = mockTeachers.find(t => t.id === params.id);
+        const foundTeacher = mockTeachers.find(t => t.id === props.id);
         setTeacher(foundTeacher || null);
         setLoading(false);
       }, 1000);
     }
-  }, [params.id]);
+  }, [props.id]);
 
   if (loading) return <div className="p-6">Chargement...</div>;
   if (!teacher) return <div className="p-6 text-red-500">Enseignant non trouvé</div>;
@@ -52,7 +53,7 @@ function TeacherDetails({ params }: { params: { id: string } }) {
           </button>
           
           <button 
-            onClick={() => router.push(`/admin/teachers/${params.id}/edit`)}
+            onClick={() => router.push(`/admin/teachers/${props.id}/edit`)}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors"
           >
             Modifier

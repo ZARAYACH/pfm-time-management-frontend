@@ -18,8 +18,8 @@ const ModulesPage = () => {
 
   if (loading) return <Loader />;*/
   const modules: Module[] = [
-    { id: "1", name: "Mathématiques", semester: "S1" },
-    { id: "2", name: "Physique", semester: "S2" },
+    { id: 1, name: "Mathématiques", semester: "S1" },
+    { id: 2, name: "Physique", semester: "S2" },
   ];
 
   return (

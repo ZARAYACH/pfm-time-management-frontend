@@ -1,16 +1,19 @@
 // app/admin/teachers/[id]/edit/page.tsx
 import TeacherForm from "@/app/components/forms/TeacherForm";
 import { Teacher } from "@/app/types/types";
-import { notFound } from "next/navigation";
+import {notFound} from "next/navigation";
+import {use} from "react";
 
-const TeacherEditPage = async ({ params }: { params: { id: string } }) => {
+const TeacherEditPage = ({params}: { params: Promise<{ id: string }> }) => {
   // Récupérer les données mockées ou via API
+  const props = use(params);
+
   const mockTeachers: Teacher[] = [
     { id: "1", name: "Marie Curie", email: "marie@example.com" },
     { id: "2", name: "Albert Einstein", email: "albert@example.com" },
   ];
 
-  const teacher = mockTeachers.find(t => t.id === params.id);
+  const teacher = mockTeachers.find(t => t.id === props.id);
 
   if (!teacher) return notFound();
 

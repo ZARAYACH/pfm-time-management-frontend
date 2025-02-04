@@ -8,7 +8,7 @@
         "generatorName": "typescript-fetch",
         "output": "app/openapi",
         "skipValidateSpec": true,
-        "inputSpec": "http://20.169.211.176/api/v1/api-docs"
+        "inputSpec": "https://pfmtimemanagementbackend.eastus.cloudapp.azure.com/api/v1/api-docs"
       }
     }
   }

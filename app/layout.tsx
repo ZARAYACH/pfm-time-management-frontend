@@ -1,19 +1,19 @@
-import {ApiContextRef} from "@/app/ApiContext";
-import {Api} from "@/app/Api";
+// app/layout.tsx
+import './globals.css';
+
+export const metadata = {
+  title: 'TimePlanner',
+  description: 'Application de gestion des emplois du temps',
+};
 
 export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
-    children: React.ReactNode;
-}>) {
-    return (
-        <ApiContextRef.Provider value={new Api()}>
-            <html lang="en">
-            <body>
-            {children}
-            </body>
-            </html>
-
-        </ApiContextRef.Provider>
-    );
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="fr">
+      <body className="bg-gray-50">{children}</body>
+    </html>
+  );
 }

@@ -12,7 +12,7 @@ const StudentTimetable = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/timetable/${user?.classId}`)
+    fetch(`/api/timetable`)
       .then((res) => res.json())
       .then(setEvents);
   }, [user]);
@@ -43,11 +43,11 @@ const StudentTimetable = () => {
       });
 
       pdf.setFontSize(18);
-      pdf.text(`Emploi du temps - ${user?.name}`, 140, 20, { align: 'center' });
+      pdf.text(`Emploi du temps - ${user?.firstName} ${user?.lastName}`, 140, 20, { align: 'center' });
       pdf.setFontSize(12);
       pdf.text(`Généré le ${new Date().toLocaleDateString()}`, 140, 30, { align: 'center' });
 
-      pdf.save(`emploi-du-temps-${user?.name}.pdf`);
+      pdf.save(`emploi-du-temps-${user?.firstName} ${user?.lastName}.pdf`);
     } catch (error) {
       console.error('Erreur génération PDF:', error);
       alert("Erreur lors de l'export !");

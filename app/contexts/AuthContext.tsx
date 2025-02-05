@@ -2,14 +2,14 @@
 
 import {createContext, useCallback, useContext, useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
-import {UserDto} from "@/app/openapi";
+import {UserDto, UserDtoRoleEnum} from "@/app/openapi";
 import useApis from "@/app/contexts/ApiContext";
 import {decodeJwt} from "jose";
 
 type AuthContextType = {
   authenticated: boolean;
   user: UserDto | undefined;
-  role: string[] | undefined;
+  role: UserDtoRoleEnum[] | undefined;
   accessToken: string | null;
   loading: boolean,
   logout: () => void;
@@ -78,7 +78,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
           ...prevState,
           accessToken: accessToken,
           user: {email: decodedToken.sub} as UserDto,
-          role: decodedToken['ROLES'] as string[],
+          role: decodedToken['ROLES'] as UserDtoRoleEnum[],
           authenticated: !prevState.authenticated,
           loading: false,
         }));

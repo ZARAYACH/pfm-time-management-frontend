@@ -11,7 +11,7 @@ const StudentDashboard = () => {
     <div className="p-6">
       <Navbar/>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Bienvenue, {user?.name}</h1>
+        <h1 className="text-2xl font-bold">Bienvenue, {user?.firstName} {user?.lastName}</h1>
         <NotificationBell />
       </div>
       

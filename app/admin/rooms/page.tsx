@@ -12,7 +12,7 @@ const RoomsPage = () => {
 
   useEffect(() => {
     classRoomApi.list5().then(value => setRooms(value)).then(() => setLoading(false));
-  })
+  }, [])
 
   return loading ? <Loader/> :
     (

@@ -15,7 +15,7 @@ const AdminDashboard = () => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">Tableau de bord administrateur</h1>
-      <p className="text-gray-600">Bienvenue, {user?.name}</p>
+      <p className="text-gray-600">Bienvenue, {user?.firstName}</p>
 
       {/* Statistiques */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">

@@ -1,53 +1,58 @@
 "use client";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import Link from "next/link";
-import {useAuth} from "@/app/contexts/AuthContext";
-
-type RegisterFormData = {
-  name: string;
-  email: string;
-  password: string;
-  role: "admin" | "teacher" | "student";
-};
+import useApis from "@/app/contexts/ApiContext";
+import {useRouter} from "next/navigation";
+import {PostUserDto} from "@/app/openapi";
+import {toast} from "react-toastify";
 
 export default function RegisterPage() {
-  const { login } = useAuth();
-  const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormData>();
+  const {usersApi} = useApis();
+  const router = useRouter();
+  const {register, handleSubmit, formState: {errors}} = useForm<PostUserDto>();
 
-  const onSubmit = async (data: RegisterFormData) => {
-    try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-      const result = await response.json();
-      if (response.ok) login(result.token);
-    } catch (error) {
-      console.error("Erreur d'inscription", error);
-    }
+  const onSubmit = async (data: PostUserDto) => {
+    usersApi.create({
+      postUserDto: {
+        email: data.email,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName
+      }
+    }).then(() => toast.success("Congrats, your account was successfully created"))
+      .then(() => router.push("/auth/login"));
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h1 className="text-2xl font-bold mb-6 text-center">Inscription</h1>
-        
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block mb-1">Nom complet</label>
+            <label className="block mb-1">Prenom</label>
             <input
               type="text"
-              {...register("name", { required: "Champ obligatoire" })}
+              {...register("firstName", {required: "Champ obligatoire"})}
               className="w-full p-2 border rounded"
             />
-            {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+            {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName.message}</p>}
+          </div>
+          <div>
+            <label className="block mb-1">Nom</label>
+            <input
+              type="text"
+              {...register("lastName", {required: "Champ obligatoire"})}
+              className="w-full p-2 border rounded"
+            />
+            {errors.lastName && <p className="text-red-500 text-sm">{errors.lastName.message}</p>}
           </div>
 
           <div>
             <label className="block mb-1">Email</label>
             <input
               type="email"
-              {...register("email", { required: "Champ obligatoire" })}
+              {...register("email", {required: "Champ obligatoire"})}
               className="w-full p-2 border rounded"
             />
             {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
@@ -57,27 +62,13 @@ export default function RegisterPage() {
             <label className="block mb-1">Mot de passe</label>
             <input
               type="password"
-              {...register("password", { 
+              {...register("password", {
                 required: "Champ obligatoire",
-                minLength: { value: 6, message: "6 caractères minimum" }
+                minLength: {value: 8, message: "8 caractères minimum"}
               })}
               className="w-full p-2 border rounded"
             />
             {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-          </div>
-
-          <div>
-            <label className="block mb-1">Rôle</label>
-            <select
-              {...register("role", { required: "Champ obligatoire" })}
-              className="w-full p-2 border rounded"
-            >
-              <option value="">Sélectionnez un rôle</option>
-              <option value="admin">Administrateur</option>
-              <option value="teacher">Enseignant</option>
-              <option value="student">Étudiant</option>
-            </select>
-            {errors.role && <p className="text-red-500 text-sm">{errors.role.message}</p>}
           </div>
 
           <button

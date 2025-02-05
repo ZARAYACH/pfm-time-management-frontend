@@ -1,5 +1,5 @@
 import {AuthenticationApi, ClassRoomApi, JwkSetApi, TokensApi, UsersApi} from "@openapi/apis";
-import {Configuration} from "@openapi/runtime";
+import {BASE_PATH, Configuration} from "@openapi/runtime";
 import {toast} from "react-toastify";
 
 
@@ -20,11 +20,10 @@ export class Api {
           toast.error(response.message)
         }
         if (context.response?.status === 401) {
-          if (context.url !== "/api/v1/tokens") {
+          if (context.url !== BASE_PATH + "/api/v1/tokens") {
             await this.tokensApi.refreshToken();
             return context.init && await fetch(context.url, context.init);
           }
-          window.location.href = "/auth/login";
         }
       }
     }],

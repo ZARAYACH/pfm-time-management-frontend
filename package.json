@@ -16,6 +16,8 @@
     "@fullcalendar/timegrid": "^6.1.15",
     "axios": "^1.7.9",
     "html2canvas": "^1.4.1",
+    "jose": "^5.9.6",
+    "jsonwebtoken": "^9.0.2",
     "jspdf": "^2.5.2",
     "next": "15.1.6",
     "react": "^19.0.0",

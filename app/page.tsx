@@ -4,13 +4,11 @@ import { useRouter } from 'next/navigation';
 import {useAuth} from "@/app/contexts/AuthContext";
 
 export default function Home() {
-  const { user } = useAuth();
   const router = useRouter();
-
+  const {user, role} = useAuth();
   useEffect(() => {
-    if (user) {
-      // Rediriger vers le dashboard selon le rôle
-      switch(user.role) {
+    if (user && role) {
+      switch(role[0]) {
         case 'admin': router.push('/admin'); break;
         case 'teacher': router.push('/teacher'); break;
         case 'student': router.push('/student'); break;
@@ -18,7 +16,7 @@ export default function Home() {
     } else {
       router.push('/auth/login'); // Redirection vers la page de connexion
     }
-  }, [user, router]);
+  }, [user, router, role]);
 
   return null; // Aucun rendu visible
 }

@@ -1,4 +1,4 @@
-// app/admin/teachers/[id]/edit/page.tsx
+// app/admin/teachers/[id]/edit/route.ts
 import TeacherForm from "@/app/components/forms/TeacherForm";
 import { Teacher } from "@/app/types/types";
 import {notFound} from "next/navigation";

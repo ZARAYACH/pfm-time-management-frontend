@@ -1,5 +1,7 @@
 // app/layout.tsx
 import './globals.css';
+import {ToastContainer} from "react-toastify";
+import {AuthProvider} from "@/app/contexts/AuthContext";
 
 export const metadata = {
   title: 'TimePlanner',
@@ -7,13 +9,18 @@ export const metadata = {
 };
 
 export default function RootLayout({
-  children,
-}: {
+                                     children,
+                                   }: {
   children: React.ReactNode
 }) {
   return (
     <html lang="fr">
-      <body className="bg-gray-50">{children}</body>
+    <AuthProvider>
+      <body className="bg-gray-50">{children}
+      <ToastContainer/>
+      </body>
+    </AuthProvider>
     </html>
+
   );
 }

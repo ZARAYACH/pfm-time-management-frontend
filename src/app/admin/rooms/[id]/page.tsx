@@ -1,39 +1,36 @@
-"use client"; // Indique que c'est un composant client
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import RoomForm from '@/components/forms/RoomForm'; // Utilisez des alias pour les chemins
-import { Room } from '@/types/types';
+"use client";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import ReservationForm from "@/components/forms/ReservationForm";
+import { Room, ReservationRequest } from "@/types/types"; // Vérifie que ces types existent
 
-const RoomEditPage = ({ params }: { params: { id: string } }) => {
-  const router = useRouter();
-  const [room, setRoom] = useState<Room | null>(null);
+const RoomDetailsPage = () => {
+  const { id } = useParams<{ id: string }>(); // ✅ Correction du type
+  const [room, setRoom] = useState<Room | null>(null); // ✅ Correction du type
 
   useEffect(() => {
-    if (params.id) {
-      // Simulation de données en attendant le backend
-      const mockRooms: Room[] = [
-        { id: "1", name: "Salle A", capacity: 30, equipment: ["Projecteur", "Tableau"] },
-        { id: "2", name: "Salle B", capacity: 50, equipment: ["Ordinateurs"] },
-      ];
-      const foundRoom = mockRooms.find(r => r.id === params.id);
-      setRoom(foundRoom || null);
-    }
-  }, [params.id]);
+    fetch(`/api/rooms/${id}`)
+      .then((res) => res.json())
+      .then((data: Room) => setRoom(data)); // ✅ On précise que `data` est de type `Room`
+  }, [id]);
 
-  const handleSubmit = async (data: Room) => {
-    await fetch(`/api/rooms/${params.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
+  const handleReservationSubmit = async (data: ReservationRequest) => { // ✅ Correction du type
+    await fetch("/api/reservations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...data, roomId: id }),
     });
-    router.push('/admin/rooms');
   };
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Éditer la Salle</h1>
-      {room && <RoomForm onSubmit={handleSubmit} initialData={room} />}
+      <h1 className="text-xl font-bold">{room?.name}</h1>
+      <p>Capacité : {room?.capacity}</p>
+
+      <h2 className="text-lg font-bold mt-4">Faire une réservation</h2>
+      <ReservationForm onSubmit={handleReservationSubmit} />
     </div>
   );
 };
 
-export default RoomEditPage;
+export default RoomDetailsPage;

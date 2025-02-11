@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../app/contexts/AuthContext";
 import Loader from "./Loader";
 
 type RoleGuardProps = {

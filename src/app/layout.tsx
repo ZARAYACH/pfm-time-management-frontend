@@ -1,19 +1,28 @@
-// app/layout.tsx
-import './globals.css';
+"use client";
+import { usePathname } from "next/navigation";
+import Navbar from "@/components/common/Navbar";
+import Footer from "@/components/common/Footer";
+import { StudentsProvider } from "@/app/contexts/StudentsContext"; // Assure-toi du bon chemin
+import "@/app/globals.css";
 
-export const metadata = {
-  title: 'TimePlanner',
-  description: 'Application de gestion des emplois du temps',
-};
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  const pathname = usePathname();
+  const hideLayout = pathname === "/auth/login" || pathname === "/auth/register";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
   return (
-    <html lang="fr">
-      <body className="bg-gray-50">{children}</body>
+    <html lang="fr" className="h-full">
+      <body className="flex flex-col min-h-screen">
+        {/* Navbar est affiché sauf sur les pages de connexion et d'inscription */}
+        {!hideLayout && <Navbar />}
+        <StudentsProvider>
+          {/* Contenu principal qui peut grandir */}
+          <main className="flex-grow">{children}</main>
+        </StudentsProvider>
+        {/* Footer est affiché sauf sur les pages de connexion et d'inscription */}
+        {!hideLayout && <Footer />}
+      </body>
     </html>
   );
-}
+};
+
+export default Layout;

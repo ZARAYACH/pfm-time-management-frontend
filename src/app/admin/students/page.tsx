@@ -1,25 +1,14 @@
 "use client";
 import Link from "next/link";
+import { useStudents } from "../../contexts/StudentsContext";
 
 const StudentsPage = () => {
   // Données factices pour les étudiants
-  const students = [
-    { id: 1, name: "Alice Dupont", class: "4ème A" },
-    { id: 2, name: "Bob Martin", class: "3ème B" },
-    { id: 3, name: "Charlie Leroy", class: "5ème C" },
-  ];
+  const { students } = useStudents();
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">Gestion des étudiants</h1>
-      <div className="mt-6">
-        <Link
-          href="/admin/students/new"
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Ajouter un étudiant
-        </Link>
-      </div>
       <div className="mt-6">
         {students.map((student) => (
           <div
@@ -37,12 +26,24 @@ const StudentsPage = () => {
               >
                 Modifier
               </Link>
-              <button className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+              {/* Redirection vers la page de confirmation de suppression */}
+              <Link
+                href={`/admin/students/${student.id}/delete`}
+                className="bg-red-500 text-white text-lg p-1 rounded hover:bg-red-600"
+              >
                 Supprimer
-              </button>
+              </Link>
             </div>
           </div>
         ))}
+      </div>
+      <div className="mt-6">
+        <Link
+          href="/admin/students/new/"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Ajouter un étudiant
+        </Link>
       </div>
     </div>
   );

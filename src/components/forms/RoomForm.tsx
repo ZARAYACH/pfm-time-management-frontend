@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { Room } from "../../types/types";
 
 type RoomFormProps = {
-  onSubmit: (data: Room) => void;
+  onSubmit: (data: Omit<Room, "id">) => void;
   initialData?: Room;
 };
 

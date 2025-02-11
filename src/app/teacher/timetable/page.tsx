@@ -1,7 +1,7 @@
 "use client";
 import {useState, useEffect} from 'react';
 import TimetableCalendar from '../../../components/calendar/TimetableCalendar';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 const TeacherTimetable = () => {
   const { user } = useAuth();

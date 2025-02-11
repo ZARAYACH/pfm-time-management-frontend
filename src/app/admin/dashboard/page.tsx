@@ -1,6 +1,6 @@
 "use client";
-import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
+import {useAuth} from "../../contexts/AuthContext";
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -18,7 +18,7 @@ const AdminDashboard = () => {
       <p className="text-gray-600">Bienvenue, {user?.name}</p>
 
       {/* Statistiques */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+      <div className="flex flex-wrap gap-6 mt-6">
         {stats.map((stat) => (
           <Link key={stat.title} href={stat.link}>
             <div className="p-6 bg-white rounded-lg shadow-md hover:bg-gray-50 transition-colors cursor-pointer">
@@ -32,7 +32,7 @@ const AdminDashboard = () => {
       {/* Actions rapides */}
       <div className="mt-8">
         <h2 className="text-xl font-bold">Actions rapides</h2>
-        <div className="flex gap-4 mt-4">
+        <div className="flex justify-between gap-4 mt-4">
           <Link href="/admin/teachers">
             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
               Gérer les enseignants
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
               Gérer les modules
             </button>
           </Link>
-          <Link href="/admin/student">
+          <Link href="/admin/students">
             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
               Gérer les étudiants
             </button>

@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import TimetableCalendar from '../../../components/calendar/TimetableCalendar';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 const StudentTimetable = () => {
   const { user } = useAuth();

@@ -2,7 +2,7 @@
 import { useAuth } from '@/app/contexts/AuthContext';
 import TimetableCalendar from '@components/calendar/TimetableCalendar';
 import NotificationBell from '@components/common/NotificationBell';
-import NavBar from "@components/common/Navbar";
+import NavBar from '@components/common/NavBar';
 
 const StudentDashboard = () => {
   const { user } = useAuth();

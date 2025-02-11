@@ -3,7 +3,7 @@ import { useAuth } from '@/app/contexts/AuthContext';
 import NotificationBell from './NotificationBell';
 import {UserDtoRoleEnum} from "@/app/openapi";
 
-const Navbar = () => {
+const NavBar = () => {
   const { user, role, logout } = useAuth();
 
   return (
@@ -27,4 +27,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavBar;

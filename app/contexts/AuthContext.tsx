@@ -1,7 +1,7 @@
 "use client";
 
 import {createContext, useCallback, useContext, useEffect, useState} from "react";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import {UserDto, UserDtoRoleEnum} from "@/app/openapi";
 import useApis from "@/app/contexts/ApiContext";
 import {decodeJwt} from "jose";
@@ -21,7 +21,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
 
   const {tokensApi} = useApis();
   const router = useRouter();
-
+  const pathname = usePathname();
   const [authContext, setAuthContext] = useState<AuthContextType>({} as AuthContextType);
 
   const logout = useCallback(() => {
@@ -40,8 +40,9 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
   }, [router])
 
   useEffect(() => {
-    const accessToken = typeof window !== 'undefined' ? window.localStorage.getItem('accessToken') : null;
+    const accessToken = typeof window !== 'undefined' ? window.localStorage.getItem('access_token') : null;
     const decodedToken = accessToken && decodeJwt(accessToken);
+
     setAuthContext(() => ({
       authenticated: false,
       user: {email: decodedToken?.sub} as UserDto,
@@ -64,11 +65,15 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     if (response.ok) {
       setAuthContext((prevState) => ({
         ...prevState,
-        authenticated: !prevState.authenticated,
+        authenticated: true,
         loading: false,
       }));
+      if (pathname == "/auth/login") {
+        router.push("/dashboard");
+      }
       return;
     }
+
 
     if (response.status === 401) {
       const accessToken = await tokensApi.refreshToken();
@@ -79,10 +84,10 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
           accessToken: accessToken,
           user: {email: decodedToken.sub} as UserDto,
           role: decodedToken['ROLES'] as UserDtoRoleEnum[],
-          authenticated: !prevState.authenticated,
+          authenticated: true,
           loading: false,
         }));
-        router.replace("/dashboard");
+        router.replace(getDashboardUrl(authContext?.role?.[0]));
         return;
       }
     }
@@ -103,6 +108,15 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
+export const getDashboardUrl = (role: UserDtoRoleEnum | undefined) : string => {
+  if (role == "ADMIN"){
+    return "/admin/dashboard"
+  }
+  if (role == "STUDENT"){
+    return "/student/dashboard"
+  }
+  return "/teacher/dashboard"
 
+}
 
 export const useAuth = () => useContext(AuthContext);

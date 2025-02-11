@@ -11,8 +11,8 @@ const RoomsPage = () => {
   const [rooms, setRooms] = useState<ClassRoomDto[]>([]);
 
   useEffect(() => {
-    classRoomApi.list5().then(value => setRooms(value)).then(() => setLoading(false));
-  }, [])
+    classRoomApi.listClassRoom().then(value => setRooms(value)).then(() => setLoading(false));
+  }, [classRoomApi])
 
   return loading ? <Loader/> :
     (

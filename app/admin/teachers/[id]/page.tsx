@@ -9,13 +9,12 @@ function TeacherDetails({params}: { params: Promise<{ id: string }> }) {
   const [loading, setLoading] = useState(true);
   const props = use(params);
 
-  // Données mockées
-  const mockTeachers: Teacher[] = [
-    { id: "1", name: "Marie Curie", email: "marie@example.com" },
-    { id: "2", name: "Albert Einstein", email: "albert@example.com" },
-  ];
 
   useEffect(() => {
+    const mockTeachers: Teacher[] = [
+      { id: "1", name: "Marie Curie", email: "marie@example.com" },
+      { id: "2", name: "Albert Einstein", email: "albert@example.com" },
+    ];
     if (props.id) {
       // Simuler un délai de chargement
       setTimeout(() => {

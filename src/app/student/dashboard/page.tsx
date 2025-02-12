@@ -1,6 +1,6 @@
 "use client";
 import { useAuth } from '../../contexts/AuthContext';
-import TimetableCalendar from '../../../components/calendar/TimetableCalendar';
+import Link from 'next/link';  // Importation du composant Link pour la navigation
 import NotificationBell from '../../../components/common/NotificationBell';
 
 const StudentDashboard = () => {
@@ -14,7 +14,21 @@ const StudentDashboard = () => {
       </div>
       
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <TimetableCalendar />
+        {/* Ajout des liens vers l'emploi du temps et la recherche d'emploi */}
+        <div className="flex flex-col gap-4">
+          <Link 
+            href="/student/timetable" 
+            className="bg-blue-500 text-white px-4 py-2 rounded text-center"
+          >
+            Voir mon emploi du temps
+          </Link>
+          <Link 
+            href="/student/search" 
+            className="bg-green-500 text-white px-4 py-2 rounded text-center"
+          >
+            Chercher un emploi
+          </Link>
+        </div>
       </div>
     </div>
   );

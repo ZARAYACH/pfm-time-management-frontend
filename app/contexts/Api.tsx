@@ -1,8 +1,13 @@
 import {
   AuthenticationApi,
   ClassRoomApi,
-  CourseApi, DepartmentApi, GroupApi,
-  JwkSetApi, SemesterApi, TimeTablesApi,
+  CourseApi,
+  DepartmentApi,
+  GroupApi,
+  JwkSetApi,
+  SemesterApi,
+  SignupApi,
+  TimeTablesApi,
   TokensApi,
   UsersApi
 } from "@openapi/apis";
@@ -22,6 +27,7 @@ export class Api {
   private readonly _semesterApi: SemesterApi;
   private readonly _timeTablesApi: TimeTablesApi;
   private readonly _departmentApi: DepartmentApi;
+  private readonly _signupApi: SignupApi
 
 
   private _conf = new Configuration({
@@ -32,11 +38,11 @@ export class Api {
           const response = await context.response.json();
           toast.error(response.message)
         }
-        if (context.response?.status === 401) {
-          if (context.url !== BASE_PATH + "/api/v1/tokens") {
-            await this.tokensApi.refreshToken();
-            return context.init && await fetch(context.url, context.init);
-          }
+        if (context.response?.status === 401 &&
+          context.url !== BASE_PATH + "/api/v1/tokens" &&
+          context.url !== BASE_PATH + "/login") {
+          await this.tokensApi.refreshToken();
+          return context.init && await fetch(context.url, context.init);
         }
       }
     }],
@@ -53,6 +59,7 @@ export class Api {
     this._groupApi = new GroupApi(this.configuration);
     this._semesterApi = new SemesterApi(this.configuration);
     this._timeTablesApi = new TimeTablesApi(this.configuration);
+    this._signupApi = new SignupApi(this.configuration);
 
   }
 
@@ -98,8 +105,12 @@ export class Api {
     return this._timeTablesApi;
   }
 
+  get signupApi(): SignupApi {
+    return this._signupApi;
+  }
+
   get departmentApi(): DepartmentApi {
     return this._departmentApi;
   }
 
-  }
+}

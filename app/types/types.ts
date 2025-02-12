@@ -14,13 +14,6 @@ export type User = {
     equipment: string[];
   };
   
-  export type Module = {
-    id: number;
-    name: string;
-    semester: string;
-    //teacherId: string;
-  };
-  
   export type Teacher = {
     id: string;
     name: string;

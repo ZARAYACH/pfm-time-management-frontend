@@ -4,6 +4,8 @@ import Link from "next/link";
 import useApis from "@/app/contexts/ApiContext";
 import {HTTPHeaders} from "@/app/openapi";
 import {useRouter} from "next/navigation";
+import {Button} from "@radix-ui/themes";
+import {useState} from "react";
 
 type LoginFormData = {
   email: string;
@@ -12,10 +14,12 @@ type LoginFormData = {
 
 export default function LoginPage() {
   const {authenticationApi} = useApis();
+  const [loading, setLoading] = useState<boolean>(false);
   const {register, handleSubmit, formState: {errors}} = useForm<LoginFormData>();
   const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
+    setLoading(true);
     authenticationApi.login(async (requestContext) => {
       return {
         headers: {
@@ -34,7 +38,9 @@ export default function LoginPage() {
         localStorage.setItem('access_token', access_token)
         router.push("/admin/dashboard")
       }
-    )
+    ).catch(() => {
+      setLoading(false);
+    });
   };
   const createAuthHeaders = (username: string, password: string): HTTPHeaders => {
     const encodedCredentials = btoa(`${username}:${password}`);
@@ -68,10 +74,10 @@ export default function LoginPage() {
             {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
           </div>
 
-          <button type="submit"
+          <Button loading={loading} type="submit"
                   className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
             Se connecter
-          </button>
+          </Button>
 
           <div className="text-center mt-4">
             <span className="text-gray-600">Pas encore de compte ? </span>

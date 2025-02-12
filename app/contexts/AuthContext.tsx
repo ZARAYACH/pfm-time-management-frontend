@@ -1,6 +1,6 @@
 "use client";
 
-import {createContext, useCallback, useContext, useEffect, useState} from "react";
+import {createContext, useCallback, useContext, useEffect, useMemo, useState} from "react";
 import {usePathname, useRouter} from "next/navigation";
 import {UserDto, UserDtoRoleEnum} from "@/app/openapi";
 import useApis from "@/app/contexts/ApiContext";
@@ -23,7 +23,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [authContext, setAuthContext] = useState<AuthContextType>({} as AuthContextType);
-
+  const publicRoutes = useMemo(() => ["/auth/register"], [])
   const logout = useCallback(() => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem("accessToken");
@@ -37,7 +37,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
         logout
       })
     )
-  }, [router])
+  }, [])
 
   useEffect(() => {
     const accessToken = typeof window !== 'undefined' ? window.localStorage.getItem('access_token') : null;
@@ -69,11 +69,10 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
         loading: false,
       }));
       if (pathname == "/auth/login") {
-        router.push("/dashboard");
+        router.replace(getDashboardUrl(authContext?.role?.[0]));
       }
       return;
     }
-
 
     if (response.status === 401) {
       const accessToken = await tokensApi.refreshToken();
@@ -91,16 +90,19 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
         return;
       }
     }
-  }, [router, tokensApi]);
+  }, [pathname, router, tokensApi]);
 
   useEffect(() => {
+    if (publicRoutes.includes(pathname)){
+      return;
+    }
     checkAuth().catch(reason => {
       console.error(reason);
       localStorage.removeItem("accessToken");
       logout();
       router.push("/auth/login");
     });
-  }, [checkAuth, logout, router, tokensApi]);
+  }, [checkAuth, logout, pathname, publicRoutes, router, tokensApi]);
 
   return (
     <AuthContext.Provider value={authContext}>
@@ -108,14 +110,14 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
-export const getDashboardUrl = (role: UserDtoRoleEnum | undefined) : string => {
-  if (role == "ADMIN"){
+export const getDashboardUrl = (role: UserDtoRoleEnum | undefined): string => {
+  if ("ROLE_" + role  === "ROLE_ADMIN") {
     return "/admin/dashboard"
   }
-  if (role == "STUDENT"){
-    return "/student/dashboard"
+  if ("ROLE_" + role === "ROLE_TEACHER") {
+    return "/teacher/dashboard"
   }
-  return "/teacher/dashboard"
+  return "/student/dashboard"
 
 }
 

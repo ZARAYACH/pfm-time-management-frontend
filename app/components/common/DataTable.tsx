@@ -16,7 +16,7 @@ export type Update<T> = (id: number, item: T) => void
 
 interface DataTableProps<T> {
   table: TTable<T>,
-  deleteItem?: (id: number | string) => void,
+  deleteItem?: (id: number) => void,
   resourceName?: string,
   pageMaxSize?: number,
   update?: Update<T>,
@@ -25,7 +25,7 @@ interface DataTableProps<T> {
   isLoading: boolean;
 }
 
-export default function DataTable<T extends { id?: number | string }>
+export default function DataTable<T extends { id?: number}>
 ({
    table,
    deleteItem,

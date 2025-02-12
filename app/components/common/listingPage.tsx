@@ -16,14 +16,16 @@ import {
 import DataTable, {Update} from "@components/common/DataTable";
 import {toast} from "react-toastify";
 
-export type SaveComponentProps<T> = { selected?: T, editMode?: boolean }
+export type SetField<T> = <K extends keyof T>(field: K, value: T[K]) => void;
+
+export type SaveComponentProps<T> = { selected?: T, setField: SetField<T>, editMode?: boolean }
 
 type ListingPageProps<T extends { id?: number | string }> = {
   columns: ColumnDef<T, T>[],
   defaultPayload?: T,
   listItems: () => Promise<T[]>,
   createItem?: (item: T) => Promise<T>,
-  deleteItem?: (p: { id: number | string }) => Promise<boolean>,
+  deleteItem?: (p: { id: number}) => Promise<{[p: string]: boolean}>,
   resourceName?: string,
   pageMaxSize?: number,
   SaveComponent?: (props: SaveComponentProps<T>) => ReactElement,
@@ -52,8 +54,6 @@ export default function ListingPage<T extends { id?: number }>
 
   useEffect(() => {
     listItems().then(data => {
-      console.log("fff")
-
       setData(data);
       setIsLoading(false);
     })
@@ -89,7 +89,7 @@ export default function ListingPage<T extends { id?: number }>
     });
   }, [])
 
-  const remove = useMemo(() => deleteItem && ((id: number | string) => {
+  const remove = useMemo(() => deleteItem && ((id: number) => {
     deleteItem({id: id}).then(() => {
         setData(prev => prev.filter(x => x.id !== id));
         toast.success(`${resourceName} deleted successfully`);
@@ -101,6 +101,10 @@ export default function ListingPage<T extends { id?: number }>
       table.setGlobalFilter(search);
     }
   }, [search, table])
+
+  const setField = useCallback<SetField<T>>((field, value) => {
+    setSelected(prev => prev ? ({...prev, [field]: value}) : undefined)
+  }, [])
 
   return (
     <>
@@ -114,7 +118,7 @@ export default function ListingPage<T extends { id?: number }>
                   <Dialog.Content>
                       <Dialog.Title>Create {resourceName}</Dialog.Title>
 
-                      <SaveComponent selected={selected} />
+                      <SaveComponent selected={selected}  setField={setField}/>
 
                       <div className="flex justify-end gap-3 mt-4">
                           <Dialog.Close>

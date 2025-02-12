@@ -15,6 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import {Text} from "@radix-ui/themes";
+import {faSchool} from "@fortawesome/free-solid-svg-icons/faSchool";
 
 const NavBar = () => {
 
@@ -63,53 +64,59 @@ const NavBar = () => {
       <MenuItem
         icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faHome}/>}
         active={pathname === '/admin/dashboard'}
-        component={<Link href={'dashboard'}/>}
+        component={<Link href={'/admin/dashboard'}/>}
       >
         <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Dashboard</span>
       </MenuItem>
       <MenuItem
+        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faSchool}/>}
+        active={pathname === "/admin/semesters"}
+        component={<Link href={"/admin/semesters"}/>}
+      >
+        <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Semesters</span>
+      </MenuItem>
+      <MenuItem
         icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faBook}/>}
         active={pathname === "/admin/modules"}
-        component={<Link href={"modules"}/>}
+        component={<Link href={"/admin/modules"}/>}
       >
         <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Modules</span>
       </MenuItem>
-      <MenuItem
-        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faUsers}/>}
-        active={pathname === ""}
-        component={<Link href={""}/>}
+
+      <MenuItem icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faUsers}/>} component={<Link href={"/admin/users"}/>}
+                                       active={pathname === "/admin/users"}
       >
-        <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Users</span>
+        <span className="ml-3">Admins</span>
       </MenuItem>
-      <MenuItem
-        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faFileAlt}/>}
-        active={pathname === ""}
-        component={<Link href={""}/>}
-      >
-        <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Offers</span>
-      </MenuItem>
-      <MenuItem
-        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faReceipt}/>}
-        active={pathname === "/admin/orders"}
-        component={<Link href={""}/>}
-      >
-        <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Orders</span>
-      </MenuItem>
-      <SubMenu icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faFlask}/>}
-               label={!collapsed ? "Tests" : ""}>
         <MenuItem
-          component={<Link href={""}/>}
-          active={pathname === ""}
-        >
-          <span className="ml-3">Scheduling</span>
-        </MenuItem>
-        <MenuItem component={<Link href={""}/>}
-                  active={pathname === ""}>
-          <span className="ml-3">Quotes</span>
-        </MenuItem>
-      </SubMenu>
-    </Menu>
-  </Sidebar>
+        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faFileAlt}/>}
+      active={pathname === ""}
+      component={<Link href={""}/>}
+    >
+      <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Offers</span>
+    </MenuItem>
+    <MenuItem
+      icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faReceipt}/>}
+      active={pathname === "/admin/orders"}
+      component={<Link href={""}/>}
+    >
+      <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Orders</span>
+    </MenuItem>
+    <SubMenu icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faFlask}/>}
+             label={!collapsed ? "Tests" : ""}>
+      <MenuItem
+        component={<Link href={""}/>}
+        active={pathname === ""}
+      >
+        <span className="ml-3">Scheduling</span>
+      </MenuItem>
+      <MenuItem component={<Link href={""}/>}
+                active={pathname === ""}>
+        <span className="ml-3">Quotes</span>
+      </MenuItem>
+    </SubMenu>
+  </Menu>
+</Sidebar>
 };
 
 export default NavBar;

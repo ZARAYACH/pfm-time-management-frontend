@@ -90,7 +90,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
         return;
       }
     }
-  }, [authContext?.role, pathname, router, tokensApi]);
+  }, [pathname, router, tokensApi]);
 
   useEffect(() => {
     if (publicRoutes.includes(pathname)) {

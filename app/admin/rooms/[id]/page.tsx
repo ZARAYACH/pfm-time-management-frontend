@@ -33,17 +33,9 @@ const ClassRoomEditPage = ({params}: { params: Promise<{ id: number }> }) => {
     }
     classRoomApi.modifyClassRoom({
       id: classRoom.id,
-      classRoomDto: {
-        id: classRoom?.id,
-        name: classRoom.name,
-        capacity: classRoom.capacity,
-        type: classRoom.type,
-        number: classRoom.number,
-        departmentId: classRoom.departmentId,
-        amphie: classRoom.amphie
-      }
+      classRoomDto: classRoom
     }).then(() => router.push('/admin/rooms'))
-  }, [classRoom?.amphie, classRoom?.capacity, classRoom?.departmentId, classRoom?.id, classRoom?.name, classRoom?.number, classRoom?.type, classRoomApi, router])
+  }, [classRoom, classRoomApi, router])
 
   useEffect(() => {
     classRoomApi.findClassRoomById({id: id}).then(classroom => {

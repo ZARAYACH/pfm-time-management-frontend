@@ -13,7 +13,7 @@ const RoleGuard = ({allowedRoles, children}: RoleGuardProps) => {
   const {user, role, loading} = useAuth();
 
   useEffect(() => {
-    if (!loading && (!user ||  !role?.[0] || !allowedRoles.includes(role?.[0]))) {
+    if (!loading && (!user || !role?.[0] || !allowedRoles.includes(role?.[0]))) {
       router.push("/auth/login");
     }
   }, [user, loading, allowedRoles, router]);

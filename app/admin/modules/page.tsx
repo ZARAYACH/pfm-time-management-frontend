@@ -1,14 +1,16 @@
 "use client"
-//import { useEffect, useState } from 'react';
 import {useMemo} from "react";
 import useApis from "@/app/contexts/ApiContext";
 import {CourseDto} from "@/app/openapi";
 import {ColumnDef} from "@tanstack/table-core";
-import ListingPage from "@components/common/listingPage";
-//import Loader from '../../../components/common/Loader';
+import ListingPage, {SaveComponentProps} from "@components/common/listingPage";
+import SaveCourse from "@/app/admin/modules/SaveCourse";
 
-const ModulesPage = () => {
-  // const [loading, setLoading] = useState<boolean>(true);
+const SaveComponent = (props: SaveComponentProps<CourseDto>) => <SaveCourse editMode={true} {...props}/>
+
+const defaultCourse: CourseDto = {id: 0, classRoomType: "COURSE", name: ''}
+
+const SemestersPage = () => {
   const {courseApi} = useApis();
 
   const columns = useMemo<ColumnDef<CourseDto>[]>(() => [{
@@ -17,7 +19,7 @@ const ModulesPage = () => {
     header: 'ID',
   }, {
     id: 'Name',
-    accessorFn: row => row.name + ' ' + row.name,
+    accessorFn: row => row.name,
     header: 'Name',
   }, {
     id: 'ClassRoom type',
@@ -31,11 +33,16 @@ const ModulesPage = () => {
         columns={columns}
         sortBy={[{id: 'id', desc: true}]}
         listItems={() => courseApi.listCourse()}
-        resourceName="Modules"
-      ></ListingPage>
+        resourceName="Module"
+        defaultPayload={defaultCourse}
+        SaveComponent={SaveComponent}
+        createItem={payload => courseApi.createCourse({courseDto: payload})}
+        deleteItem={payload => courseApi.deleteCourse({id: payload.id})}
+      >
+      </ListingPage>
 
     </div>
-);
+  );
 };
 
-export default ModulesPage;
+export default SemestersPage;

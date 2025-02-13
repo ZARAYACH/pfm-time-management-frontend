@@ -5,16 +5,18 @@ import {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
   faBook,
+  faBuilding,
+  faCalendar,
   faChevronLeft,
   faChevronRight,
-  faFileAlt,
-  faFlask,
+  faGraduationCap,
   faHome,
-  faReceipt,
+  faUserGroup,
   faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import {Text} from "@radix-ui/themes";
+import {faSchool} from "@fortawesome/free-solid-svg-icons/faSchool";
 
 const NavBar = () => {
 
@@ -63,49 +65,73 @@ const NavBar = () => {
       <MenuItem
         icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faHome}/>}
         active={pathname === '/admin/dashboard'}
-        component={<Link href={'dashboard'}/>}
+        component={<Link href={'/admin/dashboard'}/>}
       >
         <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Dashboard</span>
       </MenuItem>
       <MenuItem
+        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faSchool}/>}
+        active={pathname === "/admin/semesters"}
+        component={<Link href={"/admin/semesters"}/>}
+      >
+        <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Semesters</span>
+      </MenuItem>
+      <MenuItem
         icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faBook}/>}
         active={pathname === "/admin/modules"}
-        component={<Link href={"modules"}/>}
+        component={<Link href={"/admin/modules"}/>}
       >
         <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Modules</span>
       </MenuItem>
-      <MenuItem
-        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faUsers}/>}
-        active={pathname === ""}
-        component={<Link href={""}/>}
+
+      <MenuItem icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faUsers}/>}
+                component={<Link href={"/admin/users"}/>}
+                active={pathname === "/admin/users"}
       >
-        <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Users</span>
+        <span className="ml-3">Users</span>
       </MenuItem>
       <MenuItem
-        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faFileAlt}/>}
-        active={pathname === ""}
-        component={<Link href={""}/>}
+        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faUserGroup}/>}
+        active={pathname === "/admin/groups"}
+        component={<Link href={"/admin/groups"}/>}
       >
-        <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Offers</span>
+        <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Student Groups</span>
       </MenuItem>
-      <MenuItem
-        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faReceipt}/>}
-        active={pathname === "/admin/orders"}
-        component={<Link href={""}/>}
-      >
-        <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Orders</span>
-      </MenuItem>
-      <SubMenu icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faFlask}/>}
-               label={!collapsed ? "Tests" : ""}>
+      <SubMenu icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faBuilding}/>}
+               label={!collapsed ? "Rooms" : ""}>
         <MenuItem
-          component={<Link href={""}/>}
-          active={pathname === ""}
+          active={pathname === "/admin/departments"}
+          component={<Link href={"/admin/departments"}/>}
         >
-          <span className="ml-3">Scheduling</span>
+          <span className={`ml-3`}>Departments</span>
         </MenuItem>
-        <MenuItem component={<Link href={""}/>}
-                  active={pathname === ""}>
-          <span className="ml-3">Quotes</span>
+        <MenuItem
+          active={pathname === "/admin/rooms"}
+          component={<Link href={"/admin/rooms"}/>}
+        >
+          <span className={`ml-3`}>Class rooms</span>
+        </MenuItem>
+      </SubMenu>
+      <MenuItem icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faGraduationCap}/>}
+                component={<Link href={"/admin/classes"}/>}
+                active={pathname === "/admin/classes"}
+      >
+        <span className="ml-3">Classes</span>
+      </MenuItem>
+
+      <SubMenu icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faCalendar}/>}
+               label={!collapsed ? "TimeTables & reservations" : ""}>
+        <MenuItem
+          component={<Link href={"/admin/timetables"}/>}
+          active={pathname === "/admin/timetables"}
+        >
+          <span className="ml-3">TimeTables</span>
+        </MenuItem>
+        <MenuItem
+          component={<Link href={"/admin/reservations"}/>}
+          active={pathname === "/admin/reservations"}
+        >
+          <span className="ml-3">Reservations</span>
         </MenuItem>
       </SubMenu>
     </Menu>

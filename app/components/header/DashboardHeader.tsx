@@ -3,17 +3,19 @@ import React from 'react';
 import {Avatar, Button, DropdownMenu, Text} from "@radix-ui/themes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSignOut, faUser} from "@fortawesome/free-solid-svg-icons";
-import {BASE_PATH} from "@/app/openapi";
 import {useAuth} from "@/app/contexts/AuthContext";
 import {useRouter} from "next/navigation";
+import useApis from "@/app/contexts/ApiContext";
 
 export default function DashboardHeader() {
 
   const router = useRouter();
   const {user} = useAuth();
+  const {authenticationApi} = useApis()
 
-  const logOut = () => fetch(BASE_PATH + '/logout', {credentials: 'include'})
+  const logOut = () => authenticationApi.logout()
     .then(() => router.replace("/auth/login"))
+    .finally(() => localStorage.removeItem("access_token"))
 
   return (
     <nav className="border-gray-200 pr-8 bg-white shadow-sm">

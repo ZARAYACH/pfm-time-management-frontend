@@ -3,13 +3,13 @@ import Link from 'next/link';
 import {useAuth} from "@/app/contexts/AuthContext";
 
 const AdminDashboard = () => {
-  const { user } = useAuth();
+  const {user} = useAuth();
 
   const stats = [
-    { title: "Nombre d'enseignants", metric: "45", link: "/admin/teachers" },
-    { title: "Nombre de salles", metric: "12", link: "/admin/rooms" },
-    { title: "Nombre de modules", metric: "30", link: "/admin/modules" },
-    { title: "Étudiants inscrits", metric: "1200", link: "/admin/students" },
+    {title: "Nombre d'enseignants", metric: "45", link: "/admin/teachers"},
+    {title: "Nombre de salles", metric: "12", link: "/admin/rooms"},
+    {title: "Nombre de modules", metric: "30", link: "/admin/modules"},
+    {title: "Étudiants inscrits", metric: "1200", link: "/admin/students"},
   ];
 
   return (

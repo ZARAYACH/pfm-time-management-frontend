@@ -1,7 +1,7 @@
 "use client"
-import { useRouter } from 'next/navigation';
+import {useRouter} from 'next/navigation';
 import {use, useEffect, useState} from 'react';
-import { Teacher } from '@/app/types/types';
+import {Teacher} from '@/app/types/types';
 
 function TeacherDetails({params}: { params: Promise<{ id: string }> }) {
   const router = useRouter();
@@ -12,8 +12,8 @@ function TeacherDetails({params}: { params: Promise<{ id: string }> }) {
 
   useEffect(() => {
     const mockTeachers: Teacher[] = [
-      { id: "1", name: "Marie Curie", email: "marie@example.com" },
-      { id: "2", name: "Albert Einstein", email: "albert@example.com" },
+      {id: "1", name: "Marie Curie", email: "marie@example.com"},
+      {id: "2", name: "Albert Einstein", email: "albert@example.com"},
     ];
     if (props.id) {
       // Simuler un délai de chargement
@@ -31,27 +31,27 @@ function TeacherDetails({params}: { params: Promise<{ id: string }> }) {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Détails de l&rsquo;enseignant</h1>
-      
+
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="mb-4">
           <h2 className="text-lg font-semibold">Nom</h2>
           <p className="text-gray-700">{teacher.name}</p>
         </div>
-        
+
         <div className="mb-4">
           <h2 className="text-lg font-semibold">Email</h2>
           <p className="text-gray-700">{teacher.email}</p>
         </div>
-        
+
         <div className="flex gap-4 mt-6">
-          <button 
+          <button
             onClick={() => router.push('/admin/teachers/${id}/edit')}
             className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors"
           >
             Retour
           </button>
-          
-          <button 
+
+          <button
             onClick={() => router.push(`/admin/teachers/${props.id}/edit`)}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors"
           >
@@ -117,13 +117,13 @@ import { Teacher } from '@/types/types';
           
           <button 
             onClick={() => {/* Logique de modification }}*/
-           /* className="bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            Modifier
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+/* className="bg-blue-500 text-white px-4 py-2 rounded"
+>
+ Modifier
+</button>
+</div>
+</div>
+</div>
+);
 }
 export default TeacherDetails;*/

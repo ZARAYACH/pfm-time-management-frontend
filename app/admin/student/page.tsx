@@ -4,9 +4,9 @@ import Link from "next/link";
 const StudentsPage = () => {
   // Données factices pour les étudiants
   const students = [
-    { id: 1, name: "Alice Dupont", class: "4ème A" },
-    { id: 2, name: "Bob Martin", class: "3ème B" },
-    { id: 3, name: "Charlie Leroy", class: "5ème C" },
+    {id: 1, name: "Alice Dupont", class: "4ème A"},
+    {id: 2, name: "Bob Martin", class: "3ème B"},
+    {id: 3, name: "Charlie Leroy", class: "5ème C"},
   ];
 
   return (

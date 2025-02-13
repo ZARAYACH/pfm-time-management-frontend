@@ -4,7 +4,8 @@ import {SaveComponentProps} from "@components/common/listingPage";
 
 const defaultUser: PostUserDto = {role: "STUDENT", email: '', password: ''};
 
-export default function SaveUser({selected = defaultUser,
+export default function SaveUser({
+                                   selected = defaultUser,
                                    setField,
                                    editMode = false
                                  }: SaveComponentProps<PostUserDto>) {
@@ -18,7 +19,8 @@ export default function SaveUser({selected = defaultUser,
       </label>
       <label className="w-1/2">
         <Text as="div" size="2" mb="1" weight="bold">Password</Text>
-        <TextField.Root disabled={!editMode} type={"password"} onChange={event => setField('password', event.target.value)}
+        <TextField.Root disabled={!editMode} type={"password"}
+                        onChange={event => setField('password', event.target.value)}
                         value={selected?.['password'] ?? ''} placeholder={"********"}/>
       </label>
     </div>

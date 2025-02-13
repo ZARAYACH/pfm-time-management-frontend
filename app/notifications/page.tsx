@@ -1,7 +1,7 @@
 "use client"
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import NotificationBell from '@components/common/NotificationBell';
-import { Notification } from '@/app/types/types';
+import {Notification} from '@/app/types/types';
 
 const NotificationsPage = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -16,13 +16,13 @@ const NotificationsPage = () => {
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Notifications</h1>
-        <NotificationBell />
+        <NotificationBell/>
       </div>
-      
+
       <div className="bg-white rounded-lg shadow-md">
         {notifications.map(notification => (
-          <div 
-            key={notification.id} 
+          <div
+            key={notification.id}
             className="p-4 border-b last:border-b-0 hover:bg-gray-50"
           >
             <p className={!notification.read ? "font-semibold" : ""}>

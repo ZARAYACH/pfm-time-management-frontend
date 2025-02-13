@@ -1,19 +1,19 @@
-import { useForm } from "react-hook-form";
-import { ReservationRequest } from "@/app/types/types";
+import {useForm} from "react-hook-form";
+import {ReservationRequest} from "@/app/types/types";
 
 type ReservationFormProps = {
   onSubmit: (data: ReservationRequest) => void;
 };
 
-const ReservationForm = ({ onSubmit }: ReservationFormProps) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<ReservationRequest>();
+const ReservationForm = ({onSubmit}: ReservationFormProps) => {
+  const {register, handleSubmit, formState: {errors}} = useForm<ReservationRequest>();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
         <label className="block mb-1">Salle</label>
         <select
-          {...register("roomId", { required: "Champ obligatoire" })}
+          {...register("roomId", {required: "Champ obligatoire"})}
           className="w-full p-2 border rounded"
         >
           <option value="">Sélectionner une salle</option>
@@ -27,7 +27,7 @@ const ReservationForm = ({ onSubmit }: ReservationFormProps) => {
         <label className="block mb-1">Date de début</label>
         <input
           type="datetime-local"
-          {...register("startTime", { required: "Champ obligatoire" })}
+          {...register("startTime", {required: "Champ obligatoire"})}
           className="w-full p-2 border rounded"
         />
         {errors.startTime && <p className="text-red-500 text-sm">{errors.startTime.message}</p>}
@@ -37,7 +37,7 @@ const ReservationForm = ({ onSubmit }: ReservationFormProps) => {
         <label className="block mb-1">Date de fin</label>
         <input
           type="datetime-local"
-          {...register("endTime", { required: "Champ obligatoire" })}
+          {...register("endTime", {required: "Champ obligatoire"})}
           className="w-full p-2 border rounded"
         />
         {errors.endTime && <p className="text-red-500 text-sm">{errors.endTime.message}</p>}

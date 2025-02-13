@@ -1,6 +1,6 @@
 "use client"; // Indique que c'est un composant client
 import {use, useCallback, useEffect, useState} from 'react';
-import {PostUserDto, UserDto} from "@/app/openapi";
+import {PostUserDto} from "@/app/openapi";
 import useApis from "@/app/contexts/ApiContext";
 import {SetField} from "@components/common/listingPage";
 import PageHeader from "@components/common/PageHeader";
@@ -14,7 +14,7 @@ const UsersEditPage = ({params}: { params: Promise<{ id: number }> }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const {id} = use(params);
-  const [user, setUser] = useState<UserDto>();
+  const [user, setUser] = useState<PostUserDto>();
 
   const {usersApi} = useApis()
 
@@ -28,20 +28,21 @@ const UsersEditPage = ({params}: { params: Promise<{ id: number }> }) => {
     }
     usersApi.modifyUser({
       id: user.id,
-      userDto: {
+      postUserDto: {
         id: user?.id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role,
         birthDate: user.birthDate,
+        password: user.password
       }
     }).then(() => router.push('/admin/users'))
   }, [usersApi, user, router])
 
   useEffect(() => {
     usersApi.getUserById({id: id}).then(user => {
-      setUser(user)
+      setUser(user as PostUserDto)
     }).then(() => setLoading(false))
   }, [usersApi, id, user?.id])
 

@@ -76,11 +76,11 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
 
     if (response.status === 401) {
       const accessToken = await tokensApi.refreshToken();
-      if (!accessToken) {
-        const decodedToken = decodeJwt(accessToken);
+      if (accessToken) {
+        const decodedToken = decodeJwt(accessToken?.["access_token"]);
         setAuthContext((prevState) => ({
           ...prevState,
-          accessToken: accessToken,
+          accessToken: accessToken?.["access_token"],
           user: {email: decodedToken.sub} as UserDto,
           role: decodedToken['ROLES'] as UserDtoRoleEnum[],
           authenticated: true,
@@ -90,10 +90,10 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
         return;
       }
     }
-  }, [pathname, router, tokensApi]);
+  }, [authContext?.role, pathname, router, tokensApi]);
 
   useEffect(() => {
-    if (publicRoutes.includes(pathname)){
+    if (publicRoutes.includes(pathname)) {
       return;
     }
     checkAuth().catch(reason => {
@@ -111,7 +111,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
   );
 };
 export const getDashboardUrl = (role: UserDtoRoleEnum | undefined): string => {
-  if ("ROLE_" + role  === "ROLE_ADMIN") {
+  if ("ROLE_" + role === "ROLE_ADMIN") {
     return "/admin/dashboard"
   }
   if ("ROLE_" + role === "ROLE_TEACHER") {

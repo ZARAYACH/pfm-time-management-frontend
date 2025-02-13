@@ -5,12 +5,13 @@ import {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
   faBook,
+  faBuilding,
+  faCalendar,
   faChevronLeft,
   faChevronRight,
-  faFileAlt,
-  faFlask,
+  faGraduationCap,
   faHome,
-  faReceipt,
+  faUserGroup,
   faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
@@ -83,40 +84,58 @@ const NavBar = () => {
         <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Modules</span>
       </MenuItem>
 
-      <MenuItem icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faUsers}/>} component={<Link href={"/admin/users"}/>}
-                                       active={pathname === "/admin/users"}
+      <MenuItem icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faUsers}/>}
+                component={<Link href={"/admin/users"}/>}
+                active={pathname === "/admin/users"}
       >
-        <span className="ml-3">Admins</span>
+        <span className="ml-3">Users</span>
       </MenuItem>
-        <MenuItem
-        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faFileAlt}/>}
-      active={pathname === ""}
-      component={<Link href={""}/>}
-    >
-      <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Offers</span>
-    </MenuItem>
-    <MenuItem
-      icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faReceipt}/>}
-      active={pathname === "/admin/orders"}
-      component={<Link href={""}/>}
-    >
-      <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Orders</span>
-    </MenuItem>
-    <SubMenu icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faFlask}/>}
-             label={!collapsed ? "Tests" : ""}>
       <MenuItem
-        component={<Link href={""}/>}
-        active={pathname === ""}
+        icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faUserGroup}/>}
+        active={pathname === "/admin/groups"}
+        component={<Link href={"/admin/groups"}/>}
       >
-        <span className="ml-3">Scheduling</span>
+        <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Student Groups</span>
       </MenuItem>
-      <MenuItem component={<Link href={""}/>}
-                active={pathname === ""}>
-        <span className="ml-3">Quotes</span>
+      <SubMenu icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faBuilding}/>}
+               label={!collapsed ? "Rooms" : ""}>
+        <MenuItem
+          active={pathname === "/admin/departments"}
+          component={<Link href={"/admin/departments"}/>}
+        >
+          <span className={`ml-3`}>Departments</span>
+        </MenuItem>
+        <MenuItem
+          active={pathname === "/admin/rooms"}
+          component={<Link href={"/admin/rooms"}/>}
+        >
+          <span className={`ml-3`}>Class rooms</span>
+        </MenuItem>
+      </SubMenu>
+      <MenuItem icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faGraduationCap}/>}
+                component={<Link href={"/admin/classes"}/>}
+                active={pathname === "/admin/classes"}
+      >
+        <span className="ml-3">Classes</span>
       </MenuItem>
-    </SubMenu>
-  </Menu>
-</Sidebar>
+
+      <SubMenu icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faCalendar}/>}
+               label={!collapsed ? "TimeTables & reservations" : ""}>
+        <MenuItem
+          component={<Link href={"/admin/timetables"}/>}
+          active={pathname === "/admin/timetables"}
+        >
+          <span className="ml-3">TimeTables</span>
+        </MenuItem>
+        <MenuItem
+          component={<Link href={"/admin/reservations"}/>}
+          active={pathname === "/admin/reservations"}
+        >
+          <span className="ml-3">Reservations</span>
+        </MenuItem>
+      </SubMenu>
+    </Menu>
+  </Sidebar>
 };
 
 export default NavBar;

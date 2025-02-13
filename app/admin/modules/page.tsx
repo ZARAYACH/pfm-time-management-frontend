@@ -19,7 +19,7 @@ const SemestersPage = () => {
     header: 'ID',
   }, {
     id: 'Name',
-    accessorFn: row => row.name ,
+    accessorFn: row => row.name,
     header: 'Name',
   }, {
     id: 'ClassRoom type',

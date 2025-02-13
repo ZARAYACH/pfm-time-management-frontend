@@ -6,13 +6,13 @@ type LoginFormProps = {
   onSubmit: (credentials: { email: string; password: string }) => void;
 };
 
-export default function LoginForm({ onSubmit }: LoginFormProps) {
+export default function LoginForm({onSubmit}: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ email, password });
+    onSubmit({email, password});
   };
 
   return (

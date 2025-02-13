@@ -55,9 +55,9 @@ const DashboardNavBar = () => {
         )}
         <div className={`flex items-center justify-center ${collapsed ? '' : 'hidden'}`}></div>
         <FontAwesomeIcon width={"15"}
-          className="text-l cursor-pointer ml-2 text-green-700"
-          icon={collapsed ? faChevronRight : faChevronLeft}
-          onClick={handleCollapsedChange}
+                         className="text-l cursor-pointer ml-2 text-green-700"
+                         icon={collapsed ? faChevronRight : faChevronLeft}
+                         onClick={handleCollapsedChange}
         />
       </div>
       <MenuItem
@@ -94,7 +94,8 @@ const DashboardNavBar = () => {
       >
         <span className={`${!collapsed ? '' : 'hidden'} ml-3`}>Orders</span>
       </MenuItem>
-      <SubMenu icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faFlask}/>} label={!collapsed ? "Tests" : ""}>
+      <SubMenu icon={<FontAwesomeIcon width={"15"} color={"var(--accent-9)"} icon={faFlask}/>}
+               label={!collapsed ? "Tests" : ""}>
         <MenuItem
           component={<Link href={""}/>}
           active={pathname === ""}

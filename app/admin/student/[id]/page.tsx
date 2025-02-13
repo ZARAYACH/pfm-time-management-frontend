@@ -1,9 +1,9 @@
 "use client";
-import { useParams } from "next/navigation";
+import {useParams} from "next/navigation";
 import Link from 'next/link';
 
 const StudentDetailsPage = () => {
-  const { id } = useParams();
+  const {id} = useParams();
 
   // Données factices pour un étudiant
   const student = {

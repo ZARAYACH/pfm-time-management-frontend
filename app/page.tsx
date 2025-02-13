@@ -1,6 +1,6 @@
 "use client";
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import {useEffect} from 'react';
+import {useRouter} from 'next/navigation';
 import {useAuth} from "@/app/contexts/AuthContext";
 import {UserDtoRoleEnum} from "@/app/openapi";
 
@@ -9,10 +9,16 @@ export default function Home() {
   const {user, role} = useAuth();
   useEffect(() => {
     if (user && role) {
-      switch(role[0]) {
-        case UserDtoRoleEnum.Admin: router.push('/admin'); break;
-        case UserDtoRoleEnum.Teacher: router.push('/teacher'); break;
-        case UserDtoRoleEnum.Student: router.push('/student'); break;
+      switch (role[0]) {
+        case UserDtoRoleEnum.Admin:
+          router.push('/admin');
+          break;
+        case UserDtoRoleEnum.Teacher:
+          router.push('/teacher');
+          break;
+        case UserDtoRoleEnum.Student:
+          router.push('/student');
+          break;
       }
     } else {
       router.push('/auth/login'); // Redirection vers la page de connexion

@@ -4,7 +4,7 @@ import {SaveComponentProps} from "@components/common/listingPage";
 
 
 export default function SaveSemester({
-                                       selected ,
+                                       selected,
                                        setField,
                                        editMode = false
                                      }: SaveComponentProps<SemesterDto>) {

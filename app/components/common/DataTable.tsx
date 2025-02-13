@@ -25,7 +25,7 @@ interface DataTableProps<T> {
   isLoading: boolean;
 }
 
-export default function DataTable<T extends { id?: number}>
+export default function DataTable<T extends { id?: number }>
 ({
    table,
    deleteItem,
@@ -76,72 +76,72 @@ export default function DataTable<T extends { id?: number}>
       </Table.Header>
 
       <Table.Body>
-      {
-        isLoading 
-        ? <TableSkeleton rows={5} cols={table.getHeaderGroups()[0].headers.length + 2}/>
-        : table.getRowModel().rows.length == 0
-            ? <Table.Row>
+        {
+          isLoading
+            ? <TableSkeleton rows={5} cols={table.getHeaderGroups()[0].headers.length + 2}/>
+            : table.getRowModel().rows.length == 0
+              ? <Table.Row>
                 <Table.Cell className="text-center" colSpan={table.getHeaderGroups()[0].headers.length + 2}>
                   <Text color="gray">No Data</Text>
                 </Table.Cell>
               </Table.Row>
-            : table.getRowModel().rows.map(row => (
-              <Table.Row key={row.id}>
-                <Table.RowHeaderCell>
-                  <Checkbox checked={row.getIsSelected()} onCheckedChange={row.getToggleSelectedHandler()}/>
-                </Table.RowHeaderCell>
+              : table.getRowModel().rows.map(row => (
+                <Table.Row key={row.id}>
+                  <Table.RowHeaderCell>
+                    <Checkbox checked={row.getIsSelected()} onCheckedChange={row.getToggleSelectedHandler()}/>
+                  </Table.RowHeaderCell>
 
-                {
-                  row.getVisibleCells().map(cell =>
-                    <Table.Cell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </Table.Cell>)
-                }
+                  {
+                    row.getVisibleCells().map(cell =>
+                      <Table.Cell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </Table.Cell>)
+                  }
 
-                <Table.Cell>
-                  <div className="flex justify-end gap-3">
+                  <Table.Cell>
+                    <div className="flex justify-end gap-3">
 
-                    {children?.(row.original, update)}
+                      {children?.(row.original, update)}
 
-                    {
-                      allowEdit && <Link href={`${pathname}/${row.original.id}`}>
-                            <IconButton variant="soft">
-                                <FontAwesomeIcon icon={faPen}/>
-                            </IconButton>
-                        </Link>
-                    }
+                      {
+                        allowEdit && <Link href={`${pathname}/${row.original.id}`}>
+                              <IconButton variant="soft">
+                                  <FontAwesomeIcon icon={faPen}/>
+                              </IconButton>
+                          </Link>
+                      }
 
-                    {
-                      deleteItem && <AlertDialog.Root>
-                            <AlertDialog.Trigger>
-                                <IconButton color="crimson" variant="soft">
-                                    <FontAwesomeIcon icon={faTrash}/>
-                                </IconButton>
-                            </AlertDialog.Trigger>
-                            <AlertDialog.Content maxWidth="450px">
-                                <AlertDialog.Title>Delete {resourceName}</AlertDialog.Title>
-                                <AlertDialog.Description size="2">
-                                    Are you sure you want to delete this {resourceName}
-                                </AlertDialog.Description>
-                                <div className="flex justify-end gap-3 mt-5">
-                                    <AlertDialog.Cancel>
-                                        <Button variant="soft" color="gray">Cancel</Button>
-                                    </AlertDialog.Cancel>
-                                  {
-                                    row.original.id && row.original.id != 0 && <AlertDialog.Action>
-                                          <Button onClick={() => deleteItem(row.original.id!)} variant="solid"
-                                                  color="red">Delete {resourceName}</Button>
-                                      </AlertDialog.Action>
-                                  }
-                                </div>
-                            </AlertDialog.Content>
-                        </AlertDialog.Root>
-                    }
-                  </div>
-                </Table.Cell>
-              </Table.Row>
-            ))
-          }
+                      {
+                        deleteItem && <AlertDialog.Root>
+                              <AlertDialog.Trigger>
+                                  <IconButton color="crimson" variant="soft">
+                                      <FontAwesomeIcon icon={faTrash}/>
+                                  </IconButton>
+                              </AlertDialog.Trigger>
+                              <AlertDialog.Content maxWidth="450px">
+                                  <AlertDialog.Title>Delete {resourceName}</AlertDialog.Title>
+                                  <AlertDialog.Description size="2">
+                                      Are you sure you want to delete this {resourceName}
+                                  </AlertDialog.Description>
+                                  <div className="flex justify-end gap-3 mt-5">
+                                      <AlertDialog.Cancel>
+                                          <Button variant="soft" color="gray">Cancel</Button>
+                                      </AlertDialog.Cancel>
+                                    {
+                                      row.original.id && row.original.id != 0 && <AlertDialog.Action>
+                                            <Button onClick={() => deleteItem(row.original.id!)} variant="solid"
+                                                    color="red">Delete {resourceName}</Button>
+                                        </AlertDialog.Action>
+                                    }
+                                  </div>
+                              </AlertDialog.Content>
+                          </AlertDialog.Root>
+                      }
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
+              ))
+        }
       </Table.Body>
     </Table.Root>
 

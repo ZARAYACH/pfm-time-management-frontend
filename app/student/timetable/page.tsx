@@ -1,12 +1,12 @@
 "use client";
-import { useRef, useState, useEffect } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import TimetableCalendar from '@components/calendar/TimetableCalendar';
-import { useAuth } from '@/app/contexts/AuthContext';
+import {useAuth} from '@/app/contexts/AuthContext';
 
 const StudentTimetable = () => {
-  const { user } = useAuth();
+  const {user} = useAuth();
   const [events, setEvents] = useState([]);
   const calendarRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +21,7 @@ const StudentTimetable = () => {
     if (!calendarRef.current) return;
 
     setIsLoading(true);
-    
+
     try {
       const canvas = await html2canvas(calendarRef.current, {
         scale: 2,
@@ -43,9 +43,9 @@ const StudentTimetable = () => {
       });
 
       pdf.setFontSize(18);
-      pdf.text(`Emploi du temps - ${user?.firstName} ${user?.lastName}`, 140, 20, { align: 'center' });
+      pdf.text(`Emploi du temps - ${user?.firstName} ${user?.lastName}`, 140, 20, {align: 'center'});
       pdf.setFontSize(12);
-      pdf.text(`Généré le ${new Date().toLocaleDateString()}`, 140, 30, { align: 'center' });
+      pdf.text(`Généré le ${new Date().toLocaleDateString()}`, 140, 30, {align: 'center'});
 
       pdf.save(`emploi-du-temps-${user?.firstName} ${user?.lastName}.pdf`);
     } catch (error) {
@@ -70,10 +70,10 @@ const StudentTimetable = () => {
           {isLoading ? 'Génération en cours...' : 'Exporter en PDF'}
         </button>
       </div>
-      
+
       {/* Ajout de la ref sur le conteneur du calendrier */}
       <div ref={calendarRef} className="bg-white p-4 rounded-lg shadow-md">
-        <TimetableCalendar events={events} />
+        <TimetableCalendar events={events}/>
       </div>
     </div>
   );

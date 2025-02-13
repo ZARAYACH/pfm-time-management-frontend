@@ -3,9 +3,8 @@ import {Button, Dialog, TextField} from "@radix-ui/themes";
 import PageHeader from "@/app/components/common/PageHeader";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {ReactElement, useCallback, useEffect, useMemo, useState} from "react";
-import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faPlus, faSearch} from "@fortawesome/free-solid-svg-icons";
 import {SortingState, useReactTable} from "@tanstack/react-table";
-import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import {
   ColumnDef,
   getCoreRowModel,
@@ -25,7 +24,7 @@ type ListingPageProps<T extends { id?: number | string }> = {
   defaultPayload?: T,
   listItems: () => Promise<T[]>,
   createItem?: (item: T) => Promise<T>,
-  deleteItem?: (p: { id: number}) => Promise<{[p: string]: boolean}>,
+  deleteItem?: (p: { id: number }) => Promise<{ [p: string]: boolean }>,
   resourceName?: string,
   pageMaxSize?: number,
   SaveComponent?: (props: SaveComponentProps<T>) => ReactElement,
@@ -91,8 +90,8 @@ export default function ListingPage<T extends { id?: number }>
 
   const remove = useMemo(() => deleteItem && ((id: number) => {
     deleteItem({id: id}).then(() => {
-        setData(prev => prev.filter(x => x.id !== id));
-        toast.success(`${resourceName} deleted successfully`);
+      setData(prev => prev.filter(x => x.id !== id));
+      toast.success(`${resourceName} deleted successfully`);
     })
   }), [deleteItem, resourceName, setData])
 
@@ -115,10 +114,10 @@ export default function ListingPage<T extends { id?: number }>
                   <Dialog.Trigger>
                       <Button><FontAwesomeIcon icon={faPlus}/> Create {resourceName}</Button>
                   </Dialog.Trigger>
-                  <Dialog.Content>
+                  <Dialog.Content maxWidth={"1000px"}>
                       <Dialog.Title>Create {resourceName}</Dialog.Title>
 
-                      <SaveComponent selected={selected}  setField={setField}/>
+                      <SaveComponent selected={selected} setField={setField}/>
 
                       <div className="flex justify-end gap-3 mt-4">
                           <Dialog.Close>

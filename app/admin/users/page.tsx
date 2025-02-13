@@ -8,7 +8,8 @@ import SaveUser from "@/app/admin/users/SaveUser";
 
 const defaultUser: PostUserDto = {role: "STUDENT", email: '', password: ''};
 
-const SaveComponent = (props: SaveComponentProps<PostUserDto>) => <SaveUser selected={defaultUser} editMode={true} {...props}/>
+const SaveComponent = (props: SaveComponentProps<PostUserDto>) => <SaveUser selected={defaultUser}
+                                                                            editMode={true} {...props}/>
 
 const UsersPage = () => {
   const {usersApi} = useApis();

@@ -1,10 +1,12 @@
 import {
+  AcademicClassApi,
   AuthenticationApi,
   ClassRoomApi,
   CourseApi,
   DepartmentApi,
   GroupApi,
   JwkSetApi,
+  ReservationsApi,
   SemesterApi,
   SignupApi,
   TimeTablesApi,
@@ -16,7 +18,6 @@ import {toast} from "react-toastify";
 
 
 export class Api {
-
   private readonly _usersApi: UsersApi;
   private readonly _authenticationApi: AuthenticationApi;
   private readonly _tokensApi: TokensApi;
@@ -27,9 +28,9 @@ export class Api {
   private readonly _semesterApi: SemesterApi;
   private readonly _timeTablesApi: TimeTablesApi;
   private readonly _departmentApi: DepartmentApi;
+  private readonly _academicClassApi: AcademicClassApi;
   private readonly _signupApi: SignupApi
-
-
+  private readonly _reservationApi: ReservationsApi
   private _conf = new Configuration({
     credentials: 'include',
     middleware: [{
@@ -60,9 +61,13 @@ export class Api {
     this._semesterApi = new SemesterApi(this.configuration);
     this._timeTablesApi = new TimeTablesApi(this.configuration);
     this._signupApi = new SignupApi(this.configuration);
-
+    this._academicClassApi = new AcademicClassApi(this.configuration)
+    this._reservationApi = new ReservationsApi(this.configuration);
   }
 
+  get reservationApi(): ReservationsApi {
+    return this._reservationApi;
+  }
 
   get usersApi(): UsersApi {
     return this._usersApi;
@@ -113,4 +118,7 @@ export class Api {
     return this._departmentApi;
   }
 
+  get academicClassApi(): AcademicClassApi {
+    return this._academicClassApi;
+  }
 }

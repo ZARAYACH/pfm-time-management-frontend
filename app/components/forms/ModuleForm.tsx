@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {CourseDto} from "@/app/openapi";
 
 type ModuleFormProps = {
@@ -6,8 +6,8 @@ type ModuleFormProps = {
   initialData?: CourseDto;
 };
 
-const ModuleForm = ({ onSubmit, initialData }: ModuleFormProps) => {
-  const { register, handleSubmit } = useForm<CourseDto>({
+const ModuleForm = ({onSubmit, initialData}: ModuleFormProps) => {
+  const {register, handleSubmit} = useForm<CourseDto>({
     defaultValues: initialData
   });
 

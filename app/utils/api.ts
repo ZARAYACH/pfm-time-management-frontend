@@ -1,11 +1,7 @@
-import { Module, Room, Teacher, ReservationRequest} from '../types/types';
+import {ReservationRequest, Room, Teacher} from '../types/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 
-export const fetchModules = async (): Promise<Module[]> => {
-  const res = await fetch(`${API_URL}/modules`);
-  return res.json();
-};
 
 export const fetchRooms = async (): Promise<Room[]> => {
   const res = await fetch(`${API_URL}/rooms`);
@@ -20,7 +16,7 @@ export const fetchTeachers = async (): Promise<Teacher[]> => {
 export const createReservation = async (data: ReservationRequest) => {
   const res = await fetch(`${API_URL}/reservations`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(data),
   });
   return res.json();
@@ -29,7 +25,7 @@ export const createReservation = async (data: ReservationRequest) => {
 export const checkConflict = async (data: ReservationRequest) => {
   const res = await fetch(`${API_URL}/reservations/check`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(data),
   });
   return res.json();

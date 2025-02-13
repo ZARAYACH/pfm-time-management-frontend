@@ -18,7 +18,7 @@ export default function RegisterPage() {
         password: data.password,
         firstName: data.firstName,
         lastName: data.lastName,
-        role : "STUDENT" // This has no effect and changes nothing to add an admin you need to add a user throw admin dashboard
+        role: "STUDENT" // This has no effect and changes nothing to add an admin you need to add a user throw admin dashboard
       }
     }).then(() => toast.success("Congrats, your account was successfully created"))
       .then(() => router.push("/auth/login"));

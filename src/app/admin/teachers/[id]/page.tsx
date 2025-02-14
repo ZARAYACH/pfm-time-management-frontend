@@ -45,7 +45,7 @@ function TeacherDetails({ params }: { params: { id: string } }) {
         
         <div className="flex gap-4 mt-6">
           <button 
-            onClick={() => router.push('/admin/teachers/${id}/edit')}
+            onClick={() => router.push('/admin/teachers')}
             className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors"
           >
             Retour

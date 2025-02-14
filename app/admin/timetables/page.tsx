@@ -9,7 +9,7 @@ import SaveTimeTable from "@/app/admin/timetables/SaveTimeTable";
 const defaultTimeTable: TimeTableDto = {id: 0, groupId: 0, semesterId: 0, days: {}};
 
 const TimeTablePage = () => {
-  const {courseApi, groupApi, classRoomApi, semesterApi, usersApi, academicClassApi, timeTablesApi} = useApis();
+  const {courseApi, groupApi, classRoomApi, semesterApi, academicClassApi, timeTablesApi} = useApis();
 
   const [classes, setClasses] = useState<AcademicClassDto[]>([]);
   const [semesters, setSemesters] = useState<SemesterDto[]>([]);
@@ -17,13 +17,26 @@ const TimeTablePage = () => {
   const [groups, setGroups] = useState<GroupDto[]>([]);
   const [classrooms, setClassrooms] = useState<ClassRoomDto[]>([]);
 
+  const fetchData = useCallback(async () => {
+    const [groupsData, semestersData, coursesData, classesData, classroomsData] = await Promise.all([
+      groupApi.listGroup(),
+      semesterApi.listSemester(),
+      courseApi.listCourse(),
+      academicClassApi.listAcademicClass(),
+      classRoomApi.listClassRoom()
+    ]);
+
+    setGroups(groupsData);
+    setSemesters(semestersData);
+    setCourse(coursesData);
+    setClasses(classesData);
+    setClassrooms(classroomsData);
+  }, [academicClassApi, classRoomApi, courseApi, groupApi, semesterApi]);
+
+
   useEffect(() => {
-    groupApi.listGroup().then(value => setGroups(value));
-    semesterApi.listSemester().then(value => setSemesters(value));
-    courseApi.listCourse().then(value => setCourse(value));
-    academicClassApi.listAcademicClass().then(value => setClasses(value));
-    classRoomApi.listClassRoom().then(value => setClassrooms(value));
-  }, [academicClassApi, courseApi, groupApi, semesterApi, timeTablesApi, usersApi]);
+    fetchData();
+  }, [fetchData]);
 
   const SaveComponent = useCallback((props: SaveComponentProps<TimeTableDto>) => <SaveTimeTable classes={classes}
                                                                                                 classRooms={classrooms}

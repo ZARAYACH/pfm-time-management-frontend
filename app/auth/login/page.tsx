@@ -1,53 +1,31 @@
 "use client";
 import {useForm} from "react-hook-form";
 import Link from "next/link";
-import useApis from "@/app/contexts/ApiContext";
-import {HTTPHeaders} from "@/app/openapi";
-import {useRouter} from "next/navigation";
 import {Button} from "@radix-ui/themes";
 import {useState} from "react";
+import {useAuth} from "@/app/contexts/AuthContext";
+import {toast} from "react-toastify";
 
-type LoginFormData = {
+export type LoginFormData = {
   email: string;
   password: string;
 };
 
 export default function LoginPage() {
-  const {authenticationApi} = useApis();
+  const {login} = useAuth();
   const [loading, setLoading] = useState<boolean>(false);
   const {register, handleSubmit, formState: {errors}} = useForm<LoginFormData>();
-  const router = useRouter();
 
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
-    authenticationApi.login(async (requestContext) => {
-      return {
-        headers: {
-          ...requestContext.init.headers,
-          ...createAuthHeaders(data.email, data.password),
-        },
-      } as RequestInit;
-    }).then(res => {
-        const access_token = res.accessToken;
-        if (!access_token) {
-          return;
-        }
-        // const base64Url = access_token.split('.')[1];
-        // const base64 = base64Url.replace('-', '+').replace('_', '/');
-        // const claims = JSON.parse(window.atob(base64))
-        localStorage.setItem('access_token', access_token)
-        router.push("/admin/dashboard")
-      }
-    ).catch(() => {
+    try{
+      await login(data);
+    } catch (error) {
+      toast.error("Provided credentials don't same to work, please try again.");
+      console.error(error);
       setLoading(false);
-    });
+    }
   };
-  const createAuthHeaders = (username: string, password: string): HTTPHeaders => {
-    const encodedCredentials = btoa(`${username}:${password}`);
-    return {
-      Authorization: `Basic ${encodedCredentials}`
-    };
-  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">

@@ -17,7 +17,7 @@ const ModulesPage = () => {
     header: 'ID',
   }, {
     id: 'Name',
-    accessorFn: row => row.name + ' ' + row.name,
+    accessorFn: row => row.name ,
     header: 'Name',
   }, {
     id: 'ClassRoom type',

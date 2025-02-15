@@ -14,7 +14,7 @@ const TeacherDashboard = () => {
           </div>
         </Link>
 
-        <Link href="/teacher/timetable">
+        <Link href="/teacher/timetables">
           <div className="bg-white p-6 rounded-lg shadow-md cursor-pointer hover:bg-gray-50">
             <h2 className="text-xl font-semibold">Mon Emploi du Temps</h2>
           </div>

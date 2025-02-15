@@ -36,27 +36,29 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
 
   const checkAuth = useCallback(async () => {
     const accessToken = typeof window !== 'undefined' ? window.localStorage.getItem('access_token') : null;
+    let response;
+    if (accessToken) {
+       response = await fetch("/auth/validate", {
+        method: "GET",
+        headers: [['Authorization', 'Bearer ' + accessToken]],
+        credentials: "include"
+      });
+    }
 
-    const response = await fetch("/auth/validate", {
-      method: "GET",
-      headers: [['Authorization', 'Bearer ' + accessToken]],
-      credentials: "include"
-    });
-
-    if (response.ok) {
+    if (response && response.ok) {
       setAuthContext(prevState => ({
         ...prevState,
         authenticated: true,
         loading: false,
       }));
       if (accessToken && pathname == "/auth/login") {
-        console.log(getDashboardUrl((decodeJwt(accessToken)['ROLES'] as UserDtoRoleEnum[])?.[0]))
+        console.log(decodeJwt(accessToken)['ROLES'])
         router.replace(getDashboardUrl((decodeJwt(accessToken)['ROLES'] as UserDtoRoleEnum[])?.[0]));
       }
       return;
     }
 
-    if (response.status === 401) {
+    if (response && response.status === 401 || !accessToken) {
       const accessToken = await tokensApi.refreshToken();
       if (accessToken) {
         const decodedToken = decodeJwt(accessToken?.["access_token"]);

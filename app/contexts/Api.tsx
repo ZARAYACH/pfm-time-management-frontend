@@ -15,6 +15,7 @@ import {
 } from "@openapi/apis";
 import {BASE_PATH, Configuration} from "@openapi/runtime";
 import {toast} from "react-toastify";
+import {ExceptionDto} from "@/app/openapi";
 
 
 export class Api {
@@ -35,9 +36,13 @@ export class Api {
     credentials: 'include',
     middleware: [{
       post: async context => {
-        if (context.response.status === 400) {
-          const response = await context.response.json();
-          toast.error(response.message)
+        if (context.response.status === 400 || context.response.status === 404 || context.response.status === 500) {
+          const response: ExceptionDto = await context.response.json();
+          toast.error(response.message )
+        }
+        if(context.response.status === 500) {
+          const response: ExceptionDto = await context.response.json();
+          toast.error(response.message + " Error id : " + response.errorId)
         }
         if (context.response?.status === 401 &&
           context.url !== BASE_PATH + "/api/v1/tokens" &&

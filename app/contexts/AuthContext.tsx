@@ -34,26 +34,6 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     };
   }
 
-
-  useEffect(() => {
-    const accessToken = typeof window !== 'undefined' ? window.localStorage.getItem('access_token') : null;
-    const decodedToken = accessToken && decodeJwt(accessToken);
-
-    setAuthContext(() => ({
-      authenticated: false,
-      user: {email: decodedToken?.sub} as UserDto,
-      loading: true,
-      role: decodedToken && decodedToken['ROLES'] as string[],
-      accessToken,
-      login,
-      logout
-    } as AuthContextType));
-
-    if (accessToken) {
-      localStorage.setItem('access_token', accessToken);
-    }
-  }, []);
-
   const checkAuth = useCallback(async () => {
     const accessToken = typeof window !== 'undefined' ? window.localStorage.getItem('access_token') : null;
 
@@ -132,8 +112,29 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
       method: "GET",
       credentials: "include"
     });
-    await checkAuth().catch(() => {router.push("/auth/login")})
-  }, [authenticationApi, login])
+    await checkAuth().catch(() => {
+      router.push("/auth/login")
+    })
+  }, [authenticationApi, checkAuth, login, router])
+  useEffect(() => {
+    const accessToken = typeof window !== 'undefined' ? window.localStorage.getItem('access_token') : null;
+    const decodedToken = accessToken && decodeJwt(accessToken);
+
+    setAuthContext(() => ({
+      authenticated: false,
+      user: {email: decodedToken?.sub} as UserDto,
+      loading: true,
+      role: decodedToken && decodedToken['ROLES'] as string[],
+      accessToken,
+      login,
+      logout
+    } as AuthContextType));
+
+    if (accessToken) {
+      localStorage.setItem('access_token', accessToken);
+    }
+  }, [login, logout]);
+
 
   useEffect(() => {
     checkAuth().catch(reason => {

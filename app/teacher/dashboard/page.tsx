@@ -2,7 +2,6 @@
 import Link from 'next/link';
 
 const TeacherDashboard = () => {
-  //const { user } = useAuth();
 
   return (
     <div className="p-6">

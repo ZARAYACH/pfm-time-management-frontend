@@ -56,7 +56,7 @@ export default function ListingPage<T extends { id?: number }>
       setData(data);
       setIsLoading(false);
     })
-  }, [listItems, setData])
+  }, [listItems])
 
   const table = useReactTable<T>({
     columns: columns,
@@ -78,7 +78,7 @@ export default function ListingPage<T extends { id?: number }>
       setData(prev => [resp, ...prev])
       toast.success(`${resourceName} created successfully`);
     }).finally(() => setSelected(defaultPayload))
-  }, [createItem, defaultPayload, resourceName, selected, setData])
+  }, [createItem, defaultPayload, resourceName, selected])
 
   const update = useCallback((id: number, item: T) => {
     setData(prev => {
@@ -93,7 +93,7 @@ export default function ListingPage<T extends { id?: number }>
       setData(prev => prev.filter(x => x.id !== id));
       toast.success(`${resourceName} deleted successfully`);
     })
-  }), [deleteItem, resourceName, setData])
+  }), [deleteItem, resourceName])
 
   useEffect(() => {
     if (table) {

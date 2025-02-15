@@ -3,20 +3,9 @@ import {Menu, MenuItem, Sidebar, sidebarClasses, SubMenu} from "react-pro-sideba
 import {usePathname} from "next/navigation";
 import {useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {
-  faBook,
-  faBuilding,
-  faCalendar,
-  faChevronLeft,
-  faChevronRight,
-  faGraduationCap,
-  faHome,
-  faUserGroup,
-  faUsers
-} from "@fortawesome/free-solid-svg-icons";
+import {faCalendar, faChevronLeft, faChevronRight, faHome} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import {Text} from "@radix-ui/themes";
-import {faSchool} from "@fortawesome/free-solid-svg-icons/faSchool";
 
 const NavBar = () => {
 

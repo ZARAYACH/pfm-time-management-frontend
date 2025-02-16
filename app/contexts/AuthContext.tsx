@@ -61,6 +61,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     if (response && response.status === 401 || !accessToken) {
       const accessToken = await tokensApi.refreshToken();
       if (accessToken) {
+        localStorage.setItem("access_token", accessToken?.["access_token"]);
         const decodedToken = decodeJwt(accessToken?.["access_token"]);
         setAuthContext(prevState => ({
           ...prevState,
@@ -89,8 +90,8 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     if (!accessToken) {
       return;
     }
-    setAuthContext(prevState => ({...prevState, accessToken}));
     localStorage.setItem('access_token', accessToken);
+    setAuthContext(prevState => ({...prevState, accessToken}));
 
     await checkAuth();
   }, [authenticationApi, checkAuth])
@@ -122,6 +123,10 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     const accessToken = typeof window !== 'undefined' ? window.localStorage.getItem('access_token') : null;
     const decodedToken = accessToken && decodeJwt(accessToken);
 
+    if (accessToken) {
+      localStorage.setItem('access_token', accessToken);
+    }
+
     setAuthContext(() => ({
       authenticated: false,
       user: {email: decodedToken?.sub} as UserDto,
@@ -132,9 +137,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
       logout
     } as AuthContextType));
 
-    if (accessToken) {
-      localStorage.setItem('access_token', accessToken);
-    }
+
   }, [login, logout]);
 
 

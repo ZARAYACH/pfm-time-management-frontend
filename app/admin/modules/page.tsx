@@ -10,7 +10,7 @@ const SaveComponent = (props: SaveComponentProps<CourseDto>) => <SaveCourse edit
 
 const defaultCourse: CourseDto = {id: 0, classRoomType: "COURSE", name: ''}
 
-const SemestersPage = () => {
+const ModulesPage = () => {
   const {courseApi} = useApis();
 
   const columns = useMemo<ColumnDef<CourseDto>[]>(() => [{
@@ -19,7 +19,7 @@ const SemestersPage = () => {
     header: 'ID',
   }, {
     id: 'Name',
-    accessorFn: row => row.name,
+    accessorFn: row => row.name ,
     header: 'Name',
   }, {
     id: 'ClassRoom type',
@@ -45,4 +45,5 @@ const SemestersPage = () => {
   );
 };
 
-export default SemestersPage;
+
+export default ModulesPage;

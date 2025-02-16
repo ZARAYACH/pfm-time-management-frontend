@@ -44,7 +44,7 @@ const ClassRoomEditPage = ({params}: { params: Promise<{ id: number }> }) => {
   }, [classRoomApi, departmentApi, id])
 
   return loading ? <ItemDetailsSkeleton/> : <div className="rounded-md p-6 bg-white shadow-md">
-    <PageHeader title={`Edit department`}/>
+    <PageHeader title={`Edit class room`}/>
     {
       classRoom && <SaveClassRoom departments={departments} editMode={true} selected={classRoom} setField={setField}/>
     }

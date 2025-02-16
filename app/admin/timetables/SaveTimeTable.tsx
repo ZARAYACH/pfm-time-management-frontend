@@ -1,7 +1,17 @@
 import {Button, Card, Select, Text} from "@radix-ui/themes";
-import {AcademicClassDto, ClassRoomDto, CourseDto, Day, GroupDto, SemesterDto, TimeTableDto} from "@/app/openapi";
+import {
+  AcademicClassDto,
+  ClassRoomDto,
+  CourseDto,
+  Day,
+  GroupDto,
+  SemesterDto,
+  SlotDto,
+  TimeTableDto
+} from "@/app/openapi";
 import {SaveComponentProps} from "@components/common/listingPage";
 import {useEffect, useState} from "react";
+import useApis from "@/app/contexts/ApiContext";
 
 
 interface SaveAcademicClassProps extends SaveComponentProps<TimeTableDto> {
@@ -24,12 +34,19 @@ export default function SaveTimeTable({
                                         classRooms = [],
                                         setField
                                       }: SaveAcademicClassProps) {
+  const {timeTablesApi} = useApis();
   const [days, setDays] = useState<{ [key: string]: Day }>(selected?.days ?? {});
   const [selectedDay, setSelectedDay] = useState(DAYS[0]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(TIME_SLOTS[0]);
   const [selectedAcademicClass, setSelectedAcademicClass] = useState<AcademicClassDto | null>();
   const [selectedClassRoom, setSelectedClassRoom] = useState<ClassRoomDto | null>();
-  console.log(selected?.days)
+  const [timeSlotsOrder, setTimeSlotsOrder] = useState<SlotDto[]>([]);
+
+
+  useEffect(() => {
+    timeTablesApi.getTimeSlots().then(value => setTimeSlotsOrder(value))
+  }, [timeTablesApi]);
+
   useEffect(() => {
     setField("days", days);
   }, [days, setField]);
@@ -118,7 +135,7 @@ export default function SaveTimeTable({
               <Select.Trigger/>
               <Select.Content>
                 {TIME_SLOTS.map((slot) => (
-                  <Select.Item key={slot} value={slot}>{slot}</Select.Item>
+                  <Select.Item key={slot} value={slot}>From : {timeSlotsOrder.find(value => value.slot == slot)?.startTime} To {timeSlotsOrder.find(value => value.slot == slot)?.endTime}</Select.Item>
                 ))}
               </Select.Content>
             </Select.Root>
@@ -164,7 +181,7 @@ export default function SaveTimeTable({
               <div className="mt-2">
                 {Object.entries(details.timeSlots ?? []).map(([slot, info]) => (
                   <div key={slot} className="flex justify-between border-b py-2 items-center">
-                    <Text as="div" size="2">{slot}</Text>
+                    <Text as="div" size="2">From : {timeSlotsOrder.find(value => value.slot == slot)?.startTime} To {timeSlotsOrder.find(value => value.slot == slot)?.endTime}</Text>
                     <Text as="div"
                           size="2">Classroom:{String(info.classRoomId)} {classRooms.find(value => value.id == info.classRoomId)?.name +
                       ', number ' + classRooms.find(value => value.id == info.classRoomId)?.classNumber} </Text>

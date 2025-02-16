@@ -29,7 +29,7 @@ const TimeTableEditPage = ({params}: { params: Promise<{ id: number }> }) => {
     courseApi.listCourse().then(value => setCourse(value));
     academicClassApi.listAcademicClass().then(value => setClasses(value));
     classRoomApi.listClassRoom().then(value => setClassrooms(value));
-  }, [academicClassApi, courseApi, groupApi, semesterApi, timeTablesApi, usersApi]);
+  }, [academicClassApi, classRoomApi, courseApi, groupApi, semesterApi, timeTablesApi, usersApi]);
 
 
   const setField = useCallback<SetField<TimeTableDto>>((field, value) => {
@@ -59,7 +59,7 @@ const TimeTableEditPage = ({params}: { params: Promise<{ id: number }> }) => {
   }, [academicClassApi, id, setTimetable, timeTablesApi])
 
   return loading ? <ItemDetailsSkeleton/> : <div className="rounded-md p-6 bg-white shadow-md">
-    <PageHeader title={`Edit department`}/>
+    <PageHeader title={`Edit Timetable`}/>
     {
       timetable &&
         <SaveTimeTable selected={timetable} semesters={semesters} groups={groups} classes={classes}

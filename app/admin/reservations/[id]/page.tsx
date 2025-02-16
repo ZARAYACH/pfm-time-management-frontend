@@ -62,7 +62,7 @@ const ReservationEditPage = ({params}: { params: Promise<{ id: number }> }) => {
   }, [academicClassApi, id, reservationApi, timeTablesApi])
 
   return loading ? <ItemDetailsSkeleton/> : <div className="rounded-md p-6 bg-white shadow-md">
-    <PageHeader title={`Edit department`}/>
+    <PageHeader title={`Edit reservation`}/>
     {
       reservation &&
         <SaveReservation selected={reservation} semesters={semesters} groups={groups} classes={classes}

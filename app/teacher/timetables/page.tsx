@@ -7,7 +7,6 @@ import {Select, Text} from "@radix-ui/themes";
 import Timetable from "@components/common/TimeTable";
 
 const TeacherTimetable = () => {
-  const {} = useAuth();
   const {timeTablesApi, semesterApi} = useApis();
   const [timetables, setTimetables] = useState<TimeTableDto[]>([]);
   const [semesters, setSemesters] = useState<SemesterDto[]>([]);

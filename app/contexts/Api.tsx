@@ -8,7 +8,7 @@ import {
   JwkSetApi,
   ReservationsApi,
   SemesterApi,
-  SignupApi,
+  SignupApi, StatisticsApi,
   TimeTablesApi,
   TokensApi,
   UsersApi
@@ -19,6 +19,9 @@ import {ExceptionDto} from "@/app/openapi";
 
 
 export class Api {
+  get statisticsApi(): StatisticsApi {
+    return this._statisticsApi;
+  }
   private readonly _usersApi: UsersApi;
   private readonly _authenticationApi: AuthenticationApi;
   private readonly _tokensApi: TokensApi;
@@ -32,6 +35,8 @@ export class Api {
   private readonly _academicClassApi: AcademicClassApi;
   private readonly _signupApi: SignupApi
   private readonly _reservationApi: ReservationsApi
+  private readonly _statisticsApi: StatisticsApi
+
   private _conf = new Configuration({
     credentials: 'include',
     middleware: [{
@@ -68,6 +73,7 @@ export class Api {
     this._signupApi = new SignupApi(this.configuration);
     this._academicClassApi = new AcademicClassApi(this.configuration)
     this._reservationApi = new ReservationsApi(this.configuration);
+    this._statisticsApi = new StatisticsApi(this.configuration);
   }
 
   get reservationApi(): ReservationsApi {

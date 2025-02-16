@@ -91,9 +91,7 @@ const ReservationPage = () => {
         SaveComponent={SaveComponent}
         createItem={payload => reservationApi.createReservation({reservationDto: payload})}
         deleteItem={payload => {
-          const ids = new Set<number>();
-          ids.add(payload.id);
-          return reservationApi.deleteReservations({ids: ids, deleteRecurrences: true})
+          return reservationApi.deleteReservations({ids: [payload.id], deleteRecurrences: true})
         }}>
       </ListingPage>
     </div>

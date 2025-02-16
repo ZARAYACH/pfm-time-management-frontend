@@ -51,14 +51,14 @@ const TimeTablePage = () => {
     accessorKey: 'id',
     header: 'ID',
   }, {
-    id: 'Semester',
-    accessorKey: 'semesterId',
+    id: 'semester',
+    accessorFn: row => semesters.find(value => value.id === row.semesterId)?.year + " " + semesters.find(value => value.id === row.semesterId)?.type,
     header: 'semesterId',
   }, {
     id: 'group',
-    accessorKey: "groupId",
-    header: 'Group ID ',
-  }], []);
+    accessorFn: row => groups.find(value => row.groupId == value.id)?.name,
+    header: 'Group Name',
+  }], [groups, semesters]);
 
   return (
     <div className="p-6">

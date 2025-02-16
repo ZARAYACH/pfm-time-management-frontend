@@ -135,7 +135,8 @@ export default function SaveTimeTable({
               <Select.Trigger/>
               <Select.Content>
                 {TIME_SLOTS.map((slot) => (
-                  <Select.Item key={slot} value={slot}>From : {timeSlotsOrder.find(value => value.slot == slot)?.startTime} To {timeSlotsOrder.find(value => value.slot == slot)?.endTime}</Select.Item>
+                  <Select.Item key={slot} value={slot}>From
+                    : {timeSlotsOrder.find(value => value.slot == slot)?.startTime} To {timeSlotsOrder.find(value => value.slot == slot)?.endTime}</Select.Item>
                 ))}
               </Select.Content>
             </Select.Root>
@@ -181,7 +182,8 @@ export default function SaveTimeTable({
               <div className="mt-2">
                 {Object.entries(details.timeSlots ?? []).map(([slot, info]) => (
                   <div key={slot} className="flex justify-between border-b py-2 items-center">
-                    <Text as="div" size="2">From : {timeSlotsOrder.find(value => value.slot == slot)?.startTime} To {timeSlotsOrder.find(value => value.slot == slot)?.endTime}</Text>
+                    <Text as="div" size="2">From
+                      : {timeSlotsOrder.find(value => value.slot == slot)?.startTime} To {timeSlotsOrder.find(value => value.slot == slot)?.endTime}</Text>
                     <Text as="div"
                           size="2">Classroom:{String(info.classRoomId)} {classRooms.find(value => value.id == info.classRoomId)?.name +
                       ', number ' + classRooms.find(value => value.id == info.classRoomId)?.classNumber} </Text>

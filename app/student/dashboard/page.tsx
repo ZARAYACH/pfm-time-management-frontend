@@ -20,7 +20,6 @@ const StudentDashboard = () => {
   const calendarRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-
   useEffect(() => {
     timeTablesApi.getStudentTimetables().then(value => setTimetables(value));
     semesterApi.listSemester().then(value => setSemesters(value));
@@ -73,8 +72,7 @@ const StudentDashboard = () => {
         if (semester) {
           setSelectedSemester(semester)
         }
-      }}
-                   value={selectedSemester ? String(selectedSemester?.id) : String(semesters?.[0]?.id)}>
+      }} value={selectedSemester ? String(selectedSemester?.id) : String(semesters?.[0]?.id)}>
         <Select.Trigger/>
         <Select.Content align="start" position="popper">
           {semesters ? semesters.map((semester, index) => <Select.Item key={index}
@@ -94,13 +92,16 @@ const StudentDashboard = () => {
         onClick={handleExportPDF}
         disabled={isLoading}
         loading={isLoading}
-        className={`bg-blue-500 text-white px-4 py-2 rounded ${
+        className={`bg-blue-500 text-white px-4 py-2 rounded my-3 ${
           isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
         }`}
       >
+        {isLoading ? 'Génération en cours...' : 'Exporter en PDF'}
       </Button>
       <h1 className="text-2xl font-bold mb-6">Mon Emploi du Temps</h1>
-      <div ref={calendarRef} className="bg-white p-4 rounded-lg shadow-md">
+      <div ref={calendarRef} className="bg-white p-4 rounded-lg shadow-md my-3 ">
+        Semester starts at :{selectedSemester.startDate?.toLocaleDateString()}<br/>
+        Semester ends at : {selectedSemester.endDate?.toLocaleDateString()}
         <Timetable academicClasses={academicClasses}
                    timetable={selectedSemester ? timetables.find(value => value.semesterId == selectedSemester?.id) : timetables.find(value => value.semesterId == semesters?.[0].id)}/>
       </div>

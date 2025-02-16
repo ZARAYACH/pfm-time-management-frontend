@@ -18,26 +18,13 @@ const TimeTablePage = () => {
   const [groups, setGroups] = useState<GroupDto[]>([]);
   const [classrooms, setClassrooms] = useState<ClassRoomDto[]>([]);
 
-  const fetchData = useCallback(async () => {
-    const [groupsData, semestersData, coursesData, classesData, classroomsData] = await Promise.all([
-      groupApi.listGroup(),
-      semesterApi.listSemester(),
-      courseApi.listCourse(),
-      academicClassApi.listAcademicClass(),
-      classRoomApi.listClassRoom()
-    ]);
-
-    setGroups(groupsData);
-    setSemesters(semestersData);
-    setCourse(coursesData);
-    setClasses(classesData);
-    setClassrooms(classroomsData);
-  }, [academicClassApi, classRoomApi, courseApi, groupApi, semesterApi]);
-
-
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    groupApi.listGroup().then(value => setGroups(value));
+    semesterApi.listSemester().then(value => setSemesters(value));
+    courseApi.listCourse().then(value => setCourse(value));
+    academicClassApi.listAcademicClass().then(value => setClasses(value));
+    classRoomApi.listClassRoom().then(value => setClassrooms(value));
+  }, [academicClassApi, classRoomApi, courseApi, groupApi, semesterApi]);
 
   const SaveComponent = useCallback((props: SaveComponentProps<TimeTableDto>) => <SaveTimeTable classes={classes}
                                                                                                 classRooms={classrooms}
@@ -45,7 +32,7 @@ const TimeTablePage = () => {
                                                                                                 groups={groups}
                                                                                                 courses={courses}
                                                                                                 selected={defaultTimeTable}
-                                                                                                editMode={true} {...props}/>, [classes, courses, groups, semesters])
+                                                                                                editMode={true} {...props}/>, [classes, classrooms, courses, groups, semesters])
 
   const columns = useMemo<ColumnDef<TimeTableDto>[]>(() => [{
     id: 'id',

@@ -47,7 +47,6 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
 
     if (response && response.ok) {
       const user = await usersApi.getMe();
-      setAuthContext(prevState => ({...prevState, user}))
       setAuthContext(prevState => ({
         ...prevState,
         authenticated: true,
@@ -79,7 +78,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
         return;
       }
     }
-  }, [pathname, router, tokensApi]);
+  }, [pathname, router, tokensApi, usersApi]);
 
   const login = useCallback(async (data: LoginFormData) => {
     const res = await authenticationApi.login(async (requestContext) => {

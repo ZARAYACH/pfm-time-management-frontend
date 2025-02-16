@@ -6,7 +6,16 @@ import {ColumnDef} from "@tanstack/table-core";
 import ListingPage, {SaveComponentProps} from "@components/common/listingPage";
 import SaveAcademicClass from "@/app/admin/classes/SaveAcademicClass";
 
-const defaultAcademicClass: AcademicClassDto = {id: 0, courseId: 0, groupId: 0, semesterId: 0, teacherId: 0};
+const defaultAcademicClass: AcademicClassDto = {
+  id: 0,
+  courseId: 0,
+  groupId: 0,
+  semesterId: 0,
+  teacherId: 0,
+  courseName: "",
+  groupName: "",
+  teacherName: ""
+};
 
 const AcademicClassPage = () => {
   const {courseApi, groupApi, semesterApi, usersApi, academicClassApi} = useApis();
@@ -37,19 +46,19 @@ const AcademicClassPage = () => {
     header: 'ID',
   }, {
     id: 'group',
-    accessorKey: 'groupId',
+    accessorKey: 'groupName',
     header: 'group',
   }, {
     id: 'Teacher',
-    accessorKey: "teacherId",
-    header: 'Teacher id ',
+    accessorKey: "teacherName",
+    header: 'Teacher',
   }, {
     id: 'Semester',
     accessorKey: 'semesterId',
     header: 'Semester id ',
   }, {
     id: 'Course',
-    accessorKey: "courseId",
+    accessorKey: "courseName",
     header: 'Course id ',
   }], []);
 

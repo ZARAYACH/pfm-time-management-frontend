@@ -7,7 +7,7 @@ export default function RootLayout({children}: Readonly<{ children: React.ReactN
 
   return (
     <div className="flex h-full bg-gray-50">
-      <NavBar />
+      <NavBar/>
       <div className="w-full">
         <DashboardHeader/>
         <main className="p-6 bg-gray-50">

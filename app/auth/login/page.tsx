@@ -18,7 +18,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
-    try{
+    try {
       await login(data);
     } catch (error) {
       toast.error("Provided credentials don't same to work, please try again.");

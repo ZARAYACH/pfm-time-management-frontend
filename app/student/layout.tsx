@@ -1,6 +1,5 @@
 import React from "react";
 import DashboardHeader from "@components/header/DashboardHeader";
-import {Nabla} from "next/dist/compiled/@next/font/dist/google";
 import NavBar from "@/app/student/NavBar";
 
 

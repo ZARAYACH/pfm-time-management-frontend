@@ -38,7 +38,7 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     const accessToken = typeof window !== 'undefined' ? window.localStorage.getItem('access_token') : null;
     let response;
     if (accessToken) {
-       response = await fetch("/auth/validate", {
+      response = await fetch("/auth/validate", {
         method: "GET",
         headers: [['Authorization', 'Bearer ' + accessToken]],
         credentials: "include"

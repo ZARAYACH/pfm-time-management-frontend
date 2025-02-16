@@ -47,6 +47,7 @@ const TimeTableEditPage = ({params}: { params: Promise<{ id: number }> }) => {
         groupId: timetable.groupId,
         semesterId: timetable.semesterId,
         days: timetable.days,
+        groupName: ''
       }
     }).then(() => router.push('/admin/timetables'))
   }, [router, timeTablesApi, timetable?.days, timetable?.groupId, timetable?.id, timetable?.semesterId])

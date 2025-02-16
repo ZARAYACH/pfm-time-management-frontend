@@ -4,9 +4,10 @@ import useApis from "@/app/contexts/ApiContext";
 import {AcademicClassDto, ClassRoomDto, CourseDto, GroupDto, SemesterDto, TimeTableDto} from "@/app/openapi";
 import {ColumnDef} from "@tanstack/table-core";
 import ListingPage, {SaveComponentProps} from "@components/common/listingPage";
+
 import SaveTimeTable from "@/app/admin/timetables/SaveTimeTable";
 
-const defaultTimeTable: TimeTableDto = {id: 0, groupId: 0, semesterId: 0, days: {}};
+const defaultTimeTable: TimeTableDto = {id: 0, groupId: 0, semesterId: 0, days: {},groupName : ""};
 
 const TimeTablePage = () => {
   const {courseApi, groupApi, classRoomApi, semesterApi, academicClassApi, timeTablesApi} = useApis();

@@ -14,7 +14,7 @@ export default function DashboardHeader() {
   const {logout} = useAuth();
 
   const logOut = useCallback(async () => {
-   await logout()
+    await logout()
   }, [logout]);
 
   return (

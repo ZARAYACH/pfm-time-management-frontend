@@ -21,7 +21,7 @@ const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider = ({children}: { children: React.ReactNode }) => {
 
-  const {authenticationApi, tokensApi} = useApis();
+  const {authenticationApi, tokensApi, usersApi} = useApis();
   const router = useRouter();
   const pathname = usePathname();
   const [authContext, setAuthContext] = useState<AuthContextType>({} as AuthContextType);
@@ -46,10 +46,13 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
     }
 
     if (response && response.ok) {
+      const user = await usersApi.getMe();
+      setAuthContext(prevState => ({...prevState, user}))
       setAuthContext(prevState => ({
         ...prevState,
         authenticated: true,
         loading: false,
+        user
       }));
       if (accessToken && pathname == "/auth/login") {
         console.log(decodeJwt(accessToken)['ROLES'])
@@ -63,10 +66,11 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
       if (accessToken) {
         localStorage.setItem("access_token", accessToken?.["access_token"]);
         const decodedToken = decodeJwt(accessToken?.["access_token"]);
+        const user = await usersApi.getMe();
         setAuthContext(prevState => ({
           ...prevState,
           accessToken: accessToken?.["access_token"],
-          user: {email: decodedToken.sub} as UserDto,
+          user: user,
           role: decodedToken['ROLES'] as UserDtoRoleEnum[],
           authenticated: true,
           loading: false,
@@ -142,6 +146,9 @@ export const AuthProvider = ({children}: { children: React.ReactNode }) => {
 
 
   useEffect(() => {
+    if (publicRoutes.includes(pathname)) {
+      return;
+    }
     checkAuth().catch(reason => {
       console.error(reason);
       localStorage.removeItem("access_token");

@@ -5,6 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faSignOut, faUser} from "@fortawesome/free-solid-svg-icons";
 import {useAuth} from "@/app/contexts/AuthContext";
 import {useRouter} from "next/navigation";
+import NotificationBell from "@components/common/NotificationBell";
 
 export default function DashboardHeader() {
 
@@ -13,13 +14,14 @@ export default function DashboardHeader() {
   const {logout} = useAuth();
 
   const logOut = useCallback(async () => {
-   await logout()
+    await logout()
   }, [logout]);
 
   return (
     <nav className="border-gray-200 pr-8 bg-white shadow-sm">
       <div className="flex justify-end py-3">
         <ul className="flex font-medium items-center space-x-8 ">
+          <li><NotificationBell/></li>
           <li>
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>

@@ -9,6 +9,7 @@ import {
   ReservationsApi,
   SemesterApi,
   SignupApi,
+  StatisticsApi,
   TimeTablesApi,
   TokensApi,
   UsersApi
@@ -32,15 +33,16 @@ export class Api {
   private readonly _academicClassApi: AcademicClassApi;
   private readonly _signupApi: SignupApi
   private readonly _reservationApi: ReservationsApi
+  private readonly _statisticsApi: StatisticsApi
   private _conf = new Configuration({
     credentials: 'include',
     middleware: [{
       post: async context => {
         if (context.response.status === 400 || context.response.status === 404 || context.response.status === 500) {
           const response: ExceptionDto = await context.response.json();
-          toast.error(response.message )
+          toast.error(response.message)
         }
-        if(context.response.status === 500) {
+        if (context.response.status === 500) {
           const response: ExceptionDto = await context.response.json();
           toast.error(response.message + " Error id : " + response.errorId)
         }
@@ -68,6 +70,11 @@ export class Api {
     this._signupApi = new SignupApi(this.configuration);
     this._academicClassApi = new AcademicClassApi(this.configuration)
     this._reservationApi = new ReservationsApi(this.configuration);
+    this._statisticsApi = new StatisticsApi(this.configuration);
+  }
+
+  get statisticsApi(): StatisticsApi {
+    return this._statisticsApi;
   }
 
   get reservationApi(): ReservationsApi {

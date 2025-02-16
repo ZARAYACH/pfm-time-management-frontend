@@ -1,13 +1,11 @@
 "use client";
 import {useEffect, useState} from 'react';
-import {useAuth} from '@/app/contexts/AuthContext';
 import useApis from "@/app/contexts/ApiContext";
 import {SemesterDto, TimeTableDto} from "@/app/openapi";
 import {Select, Text} from "@radix-ui/themes";
 import Timetable from "@components/common/TimeTable";
 
 const TeacherTimetable = () => {
-  const {} = useAuth();
   const {timeTablesApi, semesterApi} = useApis();
   const [timetables, setTimetables] = useState<TimeTableDto[]>([]);
   const [semesters, setSemesters] = useState<SemesterDto[]>([]);
@@ -33,7 +31,8 @@ const TeacherTimetable = () => {
       </Select.Root>
 
       <h1 className="text-2xl font-bold mb-6">Mon Emploi du Temps</h1>
-      <Timetable timetable={selectedSemester ? timetables.find(value => value.semesterId == selectedSemester?.id) : timetables.find(value => value.semesterId == semesters?.[0].id)}/>
+      <Timetable
+        timetable={selectedSemester ? timetables.find(value => value.semesterId == selectedSemester?.id) : timetables.find(value => value.semesterId == semesters?.[0].id)}/>
     </div>
   );
 };

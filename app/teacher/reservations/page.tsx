@@ -40,7 +40,7 @@ const ReservationPage = () => {
                                                                                                     courses={[]}
                                                                                                     classes={[]}
                                                                                                     classrooms={classrooms}
-                                                                                                    editMode={true} {...props}/>, [classrooms, selectedDate]);
+                                                                                                    editMode={true} {...props}/>, [classrooms]);
 
   const setField = useCallback<SetField<ReservationDto>>((field, value) => {
     setReservation(prev => prev ? ({...prev, [field]: value}) : prev)

@@ -5,10 +5,10 @@ import {cookies} from "next/headers";
 export async function GET(req: NextRequest) {
   const cookieStore = await cookies()
 
-  let accessToken ;
+  let accessToken;
   if (cookieStore.has("access_token")) {
     accessToken = req?.cookies?.get("access_token")?.value
-  }else {
+  } else {
     accessToken = req?.headers.get("Authorization")?.split(" ")[1];
   }
 

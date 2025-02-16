@@ -1,16 +1,31 @@
 "use client";
 import Link from 'next/link';
 import {useAuth} from "@/app/contexts/AuthContext";
+import {useEffect, useMemo, useState} from "react";
+import {StatisticsDto} from "@/app/openapi";
+import useApis from "@/app/contexts/ApiContext";
 
 const AdminDashboard = () => {
   const {user} = useAuth();
+  const {statisticsApi} = useApis();
+  const [statistics, setStatistics] = useState<StatisticsDto>({
+    teachers: 0,
+    classes: 0,
+    courses: 0,
+    classrooms: 0,
+    students: 0
+  });
 
-  const stats = [
-    {title: "Nombre d'enseignants", metric: "45", link: "/admin/teachers"},
-    {title: "Nombre de salles", metric: "12", link: "/admin/rooms"},
-    {title: "Nombre de modules", metric: "30", link: "/admin/modules"},
-    {title: "Étudiants inscrits", metric: "1200", link: "/admin/students"},
-  ];
+  useEffect(() => {
+    statisticsApi.getStatistics().then(value => setStatistics(value));
+  }, [statisticsApi])
+
+  const stats = useMemo(() => [
+    {title: "Nombre d'enseignants", metric: statistics?.teachers, link: "/admin/teachers"},
+    {title: "Nombre de salles", metric: statistics.classrooms, link: "/admin/rooms"},
+    {title: "Nombre de modules", metric: statistics.courses, link: "/admin/modules"},
+    {title: "Étudiants inscrits", metric: statistics.students, link: "/admin/users"},
+  ], [statistics]);
 
   return (
     <div className="p-6">
@@ -33,9 +48,9 @@ const AdminDashboard = () => {
       <div className="mt-8">
         <h2 className="text-xl font-bold">Actions rapides</h2>
         <div className="flex gap-4 mt-4">
-          <Link href="/admin/teachers">
+          <Link href="/admin/users">
             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
-              Gérer les enseignants
+              Gérer les utilisateur
             </button>
           </Link>
           <Link href="/admin/rooms">
@@ -48,7 +63,7 @@ const AdminDashboard = () => {
               Gérer les modules
             </button>
           </Link>
-          <Link href="/admin/student">
+          <Link href="/admin/groups">
             <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
               Gérer les étudiants
             </button>

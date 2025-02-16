@@ -2,10 +2,15 @@
 
 import React, {useEffect, useState} from 'react';
 import {Table} from "@radix-ui/themes";
-import {SlotDto, TimeTableDto} from "@/app/openapi";
+import {AcademicClassDto, SlotDto, TimeTableDto} from "@/app/openapi";
 import useApis from "@/app/contexts/ApiContext";
 
-const Timetable: React.FC<{ timetable?: TimeTableDto }> = ({timetable = {days: {}} as TimeTableDto}) => {
+interface TimeTableProps {
+  timetable?: TimeTableDto,
+  academicClasses: AcademicClassDto[]
+}
+
+const Timetable = ({timetable = {days: {}} as TimeTableDto, academicClasses = []}: TimeTableProps) => {
   const daysOfWeek = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
   const [timeSlotsOrder, setTimeSlotsOrder] = useState<SlotDto[]>([]);
   const {timeTablesApi} = useApis();
@@ -38,16 +43,21 @@ const Timetable: React.FC<{ timetable?: TimeTableDto }> = ({timetable = {days: {
                   {slotData?.classRoomId && slotData?.academicClassId ? (
                     <>
                       <p>Classroom: {slotData.classRoomId}</p>
-                      <p>Class ID: {slotData.academicClassId}</p>
+                      {academicClasses.find(value => value.id = slotData.academicClassId) ?
+                        (<>
+                          <p>Class Name
+                            : {academicClasses.find(value => value.id = slotData.academicClassId)?.courseName}</p>
+                          <p>{'Group name :' + academicClasses.find(value => value.id = slotData.academicClassId)?.groupName}</p>
+                        </>) : <p>Class ID: {slotData.academicClassId}</p>}
                     </>
                   ) : (
                     "—"
                   )}
                 </Table.Cell>
-              );
+              )
             })}
-          </Table.Row>
-        ))}
+          </Table.Row>))}
+
       </Table.Body>
     </Table.Root>
 

@@ -1,19 +1,21 @@
 "use client";
 import useApis from "@/app/contexts/ApiContext";
 import {useEffect, useState} from "react";
-import {SemesterDto, TimeTableDto} from "@/app/openapi";
+import {AcademicClassDto, SemesterDto, TimeTableDto} from "@/app/openapi";
 import {Select, Text, TextField} from "@radix-ui/themes";
 import Timetable from "@components/common/TimeTable";
 
 const StudentDashboard = () => {
-  const {timeTablesApi, semesterApi} = useApis();
+  const {timeTablesApi, semesterApi , academicClassApi} = useApis();
   const [timetables, setTimetables] = useState<TimeTableDto[]>([]);
   const [semesters, setSemesters] = useState<SemesterDto[]>([]);
   const [selectedSemester, setSelectedSemester] = useState<SemesterDto>({id: 0, year: 0} as SemesterDto);
+  const [academicClasses, setAcademicClasses] = useState<AcademicClassDto[]>([]);
 
   useEffect(() => {
     timeTablesApi.getStudentTimetables().then(value => setTimetables(value));
     semesterApi.listSemester().then(value => setSemesters(value));
+    academicClassApi.listAcademicClass().then(value => setAcademicClasses(value));
   }, [semesterApi, timeTablesApi]);
 
   return (
@@ -41,7 +43,7 @@ const StudentDashboard = () => {
       >
       </TextField.Root>
       <h1 className="text-2xl font-bold mb-6">Mon Emploi du Temps</h1>
-      <Timetable
+      <Timetable academicClasses={academicClasses}
         timetable={selectedSemester ? timetables.find(value => value.semesterId == selectedSemester?.id) : timetables.find(value => value.semesterId == semesters?.[0].id)}/>
     </div>
   );

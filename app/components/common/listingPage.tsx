@@ -3,9 +3,8 @@ import {Button, Dialog, TextField} from "@radix-ui/themes";
 import PageHeader from "@/app/components/common/PageHeader";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {ReactElement, useCallback, useEffect, useMemo, useState} from "react";
-import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faPlus, faSearch} from "@fortawesome/free-solid-svg-icons";
 import {SortingState, useReactTable} from "@tanstack/react-table";
-import {faSearch} from "@fortawesome/free-solid-svg-icons";
 import {
   ColumnDef,
   getCoreRowModel,
@@ -16,14 +15,16 @@ import {
 import DataTable, {Update} from "@components/common/DataTable";
 import {toast} from "react-toastify";
 
-export type SaveComponentProps<T> = { selected?: T, editMode?: boolean }
+export type SetField<T> = <K extends keyof T>(field: K, value: T[K]) => void;
+
+export type SaveComponentProps<T> = { selected?: T, setField: SetField<T>, editMode?: boolean }
 
 type ListingPageProps<T extends { id?: number | string }> = {
   columns: ColumnDef<T, T>[],
   defaultPayload?: T,
   listItems: () => Promise<T[]>,
   createItem?: (item: T) => Promise<T>,
-  deleteItem?: (p: { id: number | string }) => Promise<boolean>,
+  deleteItem?: (p: { id: number }) => Promise<{ [p: string]: boolean }>,
   resourceName?: string,
   pageMaxSize?: number,
   SaveComponent?: (props: SaveComponentProps<T>) => ReactElement,
@@ -52,12 +53,10 @@ export default function ListingPage<T extends { id?: number }>
 
   useEffect(() => {
     listItems().then(data => {
-      console.log("fff")
-
       setData(data);
       setIsLoading(false);
     })
-  }, [listItems, setData])
+  }, [listItems])
 
   const table = useReactTable<T>({
     columns: columns,
@@ -79,7 +78,7 @@ export default function ListingPage<T extends { id?: number }>
       setData(prev => [resp, ...prev])
       toast.success(`${resourceName} created successfully`);
     }).finally(() => setSelected(defaultPayload))
-  }, [createItem, defaultPayload, resourceName, selected, setData])
+  }, [createItem, defaultPayload, resourceName, selected])
 
   const update = useCallback((id: number, item: T) => {
     setData(prev => {
@@ -89,18 +88,22 @@ export default function ListingPage<T extends { id?: number }>
     });
   }, [])
 
-  const remove = useMemo(() => deleteItem && ((id: number | string) => {
+  const remove = useMemo(() => deleteItem && ((id: number) => {
     deleteItem({id: id}).then(() => {
-        setData(prev => prev.filter(x => x.id !== id));
-        toast.success(`${resourceName} deleted successfully`);
+      setData(prev => prev.filter(x => x.id !== id));
+      toast.success(`${resourceName} deleted successfully`);
     })
-  }), [deleteItem, resourceName, setData])
+  }), [deleteItem, resourceName])
 
   useEffect(() => {
     if (table) {
       table.setGlobalFilter(search);
     }
   }, [search, table])
+
+  const setField = useCallback<SetField<T>>((field, value) => {
+    setSelected(prev => prev ? ({...prev, [field]: value}) : undefined)
+  }, [])
 
   return (
     <>
@@ -111,10 +114,10 @@ export default function ListingPage<T extends { id?: number }>
                   <Dialog.Trigger>
                       <Button><FontAwesomeIcon icon={faPlus}/> Create {resourceName}</Button>
                   </Dialog.Trigger>
-                  <Dialog.Content>
+                  <Dialog.Content maxWidth={"1000px"}>
                       <Dialog.Title>Create {resourceName}</Dialog.Title>
 
-                      <SaveComponent selected={selected} />
+                      <SaveComponent selected={selected} setField={setField}/>
 
                       <div className="flex justify-end gap-3 mt-4">
                           <Dialog.Close>

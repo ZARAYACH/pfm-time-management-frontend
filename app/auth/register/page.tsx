@@ -7,17 +7,18 @@ import {PostUserDto} from "@/app/openapi";
 import {toast} from "react-toastify";
 
 export default function RegisterPage() {
-  const {usersApi} = useApis();
+  const {signupApi} = useApis();
   const router = useRouter();
   const {register, handleSubmit, formState: {errors}} = useForm<PostUserDto>();
 
   const onSubmit = async (data: PostUserDto) => {
-    usersApi.create({
+    signupApi.signUp({
       postUserDto: {
         email: data.email,
         password: data.password,
         firstName: data.firstName,
-        lastName: data.lastName
+        lastName: data.lastName,
+        role: "STUDENT" // This has no effect and changes nothing to add an admin you need to add a user throw admin dashboard
       }
     }).then(() => toast.success("Congrats, your account was successfully created"))
       .then(() => router.push("/auth/login"));

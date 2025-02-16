@@ -1,41 +1,86 @@
 "use client";
-import { useState } from 'react';
-import ReservationForm from '@components/forms/ReservationForm';
+import {useCallback, useEffect, useState} from 'react';
 import RoomAvailabilityCalendar from '@components/calendar/RoomAvailabilityCalendar';
-import { ReservationRequest } from '@/app/types/types';
-import ConflictAlertModal from '@components/forms/ConflictAlertModal';
+import {ClassRoomDto, ReservationDto} from "@/app/openapi";
+import useApis from "@/app/contexts/ApiContext";
+import {Button, Dialog} from "@radix-ui/themes";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import {SaveComponentProps, SetField} from "@components/common/listingPage";
+import SaveReservation from "@/app/admin/reservations/SaveReservation";
 
 const ReservationPage = () => {
-  const [conflict, setConflict] = useState<string | null>(null);
+  const [reservations, setReservations] = useState<ReservationDto[]>([]);
+  const {reservationApi, classRoomApi} = useApis();
+  const [createDialogOpen, setCreateDialogOpen] = useState<boolean>(false);
+  const [selectedDate, setSelectedDate] = useState<{ start: Date, end: Date } | undefined>(undefined);
+  const [classrooms, setClassrooms] = useState<ClassRoomDto[]>([]);
+  const [reservation, setReservation] = useState<ReservationDto>({id: 0, type: "NONE"});
+  useEffect(() => {
+    reservationApi.getAllReservations().then(value => setReservations(value));
+  }, [reservationApi]);
 
-  const handleSubmit = async (data: ReservationRequest) => {
-    try {
-      // Appel API pour vérifier les conflits
-      const response = await fetch('/api/reservations/check', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
-      
-      if (response.ok) {
-        // Enregistrer la réservation
-        await fetch('/api/reservations', { method: 'POST', body: JSON.stringify(data) });
-        alert('Réservation réussie !');
-      } else {
-        const error = await response.json();
-        setConflict(error.message); // Afficher un conflit
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  useEffect(() => {
+    setReservation(prevState => ({...prevState, startTime: selectedDate?.start, endTime: selectedDate?.end}))
+  }, [selectedDate]);
+
+
+  const handleOnDateSelect = useCallback((arg: {
+    start: Date, end: Date
+  }) => {
+    setSelectedDate(arg);
+    setCreateDialogOpen(true);
+  }, []);
+
+  useEffect(() => {
+    classRoomApi.listClassRoom().then(value => setClassrooms(value));
+  }, [classRoomApi]);
+  const SaveComponent = useCallback((props: SaveComponentProps<ReservationDto>) => <SaveReservation groups={[]}
+                                                                                                    semesters={[]}
+                                                                                                    courses={[]}
+                                                                                                    classes={[]}
+                                                                                                    classrooms={classrooms}
+                                                                                                    editMode={true} {...props}/>, [classrooms]);
+
+  const setField = useCallback<SetField<ReservationDto>>((field, value) => {
+    setReservation(prev => prev ? ({...prev, [field]: value}) : prev)
+  }, [setReservation])
+
+  const create = useCallback(() => {
+    reservationApi.createReservation({reservationDto: reservation})
+      .then(value => setReservations(prevState => ([...prevState, value])));
+  }, [reservation, reservationApi])
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Réserver une Salle</h1>
-      <ReservationForm onSubmit={handleSubmit} />
-      {conflict && <ConflictAlertModal message={conflict} onClose={() => setConflict(null)} />}
+      {createDialogOpen && <Dialog.Root open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+          <Dialog.Trigger>
+              <Button><FontAwesomeIcon icon={faPlus}/> Create Reservation</Button>
+          </Dialog.Trigger>
+          <Dialog.Content maxWidth={"1000px"}>
+              <Dialog.Title>Create resevation</Dialog.Title>
+
+              <SaveComponent selected={reservation} setField={setField}/>
+
+              <div className="flex justify-end gap-3 mt-4">
+                  <Dialog.Close>
+                      <Button variant="soft" color="gray">
+                          Cancel
+                      </Button>
+                  </Dialog.Close>
+                  <Dialog.Close>
+                      <Button onClick={create}> Create Reservation</Button>
+                  </Dialog.Close>
+              </div>
+          </Dialog.Content>
+      </Dialog.Root>}
       <div className="mt-8">
-        <RoomAvailabilityCalendar />
+        <RoomAvailabilityCalendar events={reservations.map(reservation => ({
+          title: `Class room : ${reservation.classRoomNumber}`,
+          groupId: reservation.classRoomNumber,
+          start: reservation.startTime,
+          end: reservation.endTime
+        }))} onDateSelect={arg => handleOnDateSelect(arg)}/>
       </div>
     </div>
   );

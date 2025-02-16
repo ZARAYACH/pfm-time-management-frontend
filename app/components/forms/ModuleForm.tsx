@@ -1,13 +1,13 @@
-import { useForm } from "react-hook-form";
-import { Module } from "@/app/types/types";
+import {useForm} from "react-hook-form";
+import {CourseDto} from "@/app/openapi";
 
 type ModuleFormProps = {
-  onSubmit: (data: Module) => void;
-  initialData?: Module;
+  onSubmit: (data: CourseDto) => void;
+  initialData?: CourseDto;
 };
 
-const ModuleForm = ({ onSubmit, initialData }: ModuleFormProps) => {
-  const { register, handleSubmit } = useForm<Module>({
+const ModuleForm = ({onSubmit, initialData}: ModuleFormProps) => {
+  const {register, handleSubmit} = useForm<CourseDto>({
     defaultValues: initialData
   });
 
@@ -25,7 +25,6 @@ const ModuleForm = ({ onSubmit, initialData }: ModuleFormProps) => {
       <div>
         <label className="block mb-1">Semestre</label>
         <select
-          {...register("semester")}
           className="w-full p-2 border rounded"
           required
         >

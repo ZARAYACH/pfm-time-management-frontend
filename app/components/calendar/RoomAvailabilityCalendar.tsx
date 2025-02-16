@@ -2,17 +2,17 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import frLocale from "@fullcalendar/core/locales/fr";
-import { EventInput } from "@fullcalendar/core";
+import {EventInput} from "@fullcalendar/core";
 
 type RoomAvailabilityCalendarProps = {
   events?: EventInput[];
   onDateSelect?: (arg: { start: Date; end: Date }) => void;
 };
 
-const RoomAvailabilityCalendar = ({ 
-  events = [], 
-  onDateSelect 
-}: RoomAvailabilityCalendarProps) => {
+const RoomAvailabilityCalendar = ({
+                                    events = [],
+                                    onDateSelect
+                                  }: RoomAvailabilityCalendarProps) => {
   return (
     <div className="p-4 border rounded-lg bg-white">
       <FullCalendar

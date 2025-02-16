@@ -1,95 +1,68 @@
-"use client";
-import {useEffect, useState} from 'react';
-import Link from 'next/link';
-import {ClassRoomDto} from "@/app/openapi";
+"use client"
+import {useCallback, useEffect, useMemo, useState} from "react";
 import useApis from "@/app/contexts/ApiContext";
-import Loader from "@components/common/Loader";
+import {ClassRoomDto, DepartmentDto} from "@/app/openapi";
+import {ColumnDef} from "@tanstack/table-core";
+import ListingPage, {SaveComponentProps} from "@components/common/listingPage";
+import SaveClassRoom from "@/app/admin/rooms/SaveClassRoom";
 
-const RoomsPage = () => {
-  const {classRoomApi} = useApis();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [rooms, setRooms] = useState<ClassRoomDto[]>([]);
 
-  useEffect(() => {
-    classRoomApi.listClassRoom().then(value => setRooms(value)).then(() => setLoading(false));
-  }, [classRoomApi])
+const defaultRoom: ClassRoomDto = {id: 0, capacity: 0, classNumber: "", type: "COURSE"}
 
-  return loading ? <Loader/> :
-    (
-      <div className="p-6">
-        <div className="flex justify-between mb-6">
-          <h1 className="text-2xl font-bold">Gestion des Salles</h1>
-          <Link href="/admin/rooms/new" className="bg-green-500 text-white px-4 py-2 rounded">
-            + Ajouter une Salle
-          </Link>
-        </div>
+const ClassRoomsPage = () => {
+  const {departmentApi, classRoomApi} = useApis();
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {rooms.map(room => (
-            <div key={room.id} className="bg-white p-4 rounded-lg shadow-md">
-              <h3 className="font-semibold">{room.name}</h3>
-              <p>Capacité: {room.capacity}</p>
-              <Link
-                href={`/app/admin/rooms/${room.id}`}
-                className="text-blue-500 mt-2 inline-block"
-              >
-                Éditer
-              </Link>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-};
-
-export default RoomsPage;
-/*"use client";
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Room } from '../../../types/types';
-import Loader from '../../../components/common/Loader';
-
-const RoomsPage = () => {
-  const [rooms, setRooms] = useState<Room[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [departments, setDepartments] = useState<DepartmentDto[]>([]);
 
   useEffect(() => {
-    fetch('/api/rooms')
-      .then(res => res.json())
-      .then(data => {
-        setRooms(data);
-        setLoading(false);
-      });
-  }, []);
+    departmentApi.listDepartment().then(value => setDepartments(value));
+  }, [departmentApi])
 
-  if (loading) return <Loader />;
+  const SaveComponent = useCallback((props: SaveComponentProps<ClassRoomDto>) => <SaveClassRoom
+    departments={departments} editMode={true} {...props}/>, [departments])
+
+  const columns = useMemo<ColumnDef<ClassRoomDto>[]>(() => [{
+    id: 'id',
+    accessorKey: 'id',
+    header: 'ID',
+  }, {
+    id: 'Name',
+    accessorKey: "name",
+    header: 'Name',
+  }, {
+    id: 'Number',
+    accessorKey: 'classNumber',
+    header: 'number',
+  }, {
+    id: 'capacity',
+    accessorKey: 'capacity',
+    header: 'capacity',
+  }, {
+    id: 'departmentId',
+    accessorKey: 'departmentId',
+    header: 'departementId',
+  }, {
+    id: 'type',
+    accessorKey: 'type',
+    header: 'type',
+  }], []);
 
   return (
     <div className="p-6">
-      <div className="flex justify-between mb-6">
-        <h1 className="text-2xl font-bold">Gestion des Salles</h1>
-        <Link href="/admin/rooms/new" className="bg-green-500 text-white px-4 py-2 rounded">
-          + Ajouter une Salle
-        </Link>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {rooms.map(room => (
-          <div key={room.id} className="bg-white p-4 rounded-lg shadow-md">
-            <h3 className="font-semibold">{room.name}</h3>
-            <p>Capacité: {room.capacity}</p>
-            <p>Équipement: {room.equipment.join(', ')}</p>
-            <Link 
-              href={`/admin/rooms/${room.id}`} 
-              className="text-blue-500 mt-2 inline-block"
-            >
-              Éditer
-            </Link>
-          </div>
-        ))}
-      </div>
+      <ListingPage<ClassRoomDto>
+        columns={columns}
+        sortBy={[{id: 'id', desc: true}]}
+        listItems={() => classRoomApi.listClassRoom()}
+        resourceName="Class rooms"
+        defaultPayload={defaultRoom}
+        SaveComponent={SaveComponent}
+        createItem={payload => classRoomApi.createClassRoom({classRoomDto: payload})}
+        deleteItem={payload => classRoomApi.deleteClassRoom({id: payload.id})}
+      >
+      </ListingPage>
+
     </div>
   );
 };
 
-export default RoomsPage;*/
+export default ClassRoomsPage;

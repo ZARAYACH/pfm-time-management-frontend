@@ -1,17 +1,25 @@
 import {
+  AcademicClassApi,
   AuthenticationApi,
   ClassRoomApi,
-  CourseApi, DepartmentApi, GroupApi,
-  JwkSetApi, SemesterApi, TimeTablesApi,
+  CourseApi,
+  DepartmentApi,
+  GroupApi,
+  JwkSetApi,
+  ReservationsApi,
+  SemesterApi,
+  SignupApi,
+  StatisticsApi,
+  TimeTablesApi,
   TokensApi,
   UsersApi
 } from "@openapi/apis";
 import {BASE_PATH, Configuration} from "@openapi/runtime";
 import {toast} from "react-toastify";
+import {ExceptionDto} from "@/app/openapi";
 
 
 export class Api {
-
   private readonly _usersApi: UsersApi;
   private readonly _authenticationApi: AuthenticationApi;
   private readonly _tokensApi: TokensApi;
@@ -22,21 +30,27 @@ export class Api {
   private readonly _semesterApi: SemesterApi;
   private readonly _timeTablesApi: TimeTablesApi;
   private readonly _departmentApi: DepartmentApi;
-
-
+  private readonly _academicClassApi: AcademicClassApi;
+  private readonly _signupApi: SignupApi
+  private readonly _reservationApi: ReservationsApi
+  private readonly _statisticsApi: StatisticsApi
   private _conf = new Configuration({
     credentials: 'include',
     middleware: [{
       post: async context => {
-        if (context.response.status === 400) {
-          const response = await context.response.json();
+        if (context.response.status === 400 || context.response.status === 404 || context.response.status === 500) {
+          const response: ExceptionDto = await context.response.json();
           toast.error(response.message)
         }
-        if (context.response?.status === 401) {
-          if (context.url !== BASE_PATH + "/api/v1/tokens") {
-            await this.tokensApi.refreshToken();
-            return context.init && await fetch(context.url, context.init);
-          }
+        if (context.response.status === 500) {
+          const response: ExceptionDto = await context.response.json();
+          toast.error(response.message + " Error id : " + response.errorId)
+        }
+        if (context.response?.status === 401 &&
+          context.url !== BASE_PATH + "/api/v1/tokens" &&
+          context.url !== BASE_PATH + "/login") {
+          await this.tokensApi.refreshToken();
+          return context.init && await fetch(context.url, context.init);
         }
       }
     }],
@@ -53,9 +67,19 @@ export class Api {
     this._groupApi = new GroupApi(this.configuration);
     this._semesterApi = new SemesterApi(this.configuration);
     this._timeTablesApi = new TimeTablesApi(this.configuration);
-
+    this._signupApi = new SignupApi(this.configuration);
+    this._academicClassApi = new AcademicClassApi(this.configuration)
+    this._reservationApi = new ReservationsApi(this.configuration);
+    this._statisticsApi = new StatisticsApi(this.configuration);
   }
 
+  get statisticsApi(): StatisticsApi {
+    return this._statisticsApi;
+  }
+
+  get reservationApi(): ReservationsApi {
+    return this._reservationApi;
+  }
 
   get usersApi(): UsersApi {
     return this._usersApi;
@@ -98,8 +122,15 @@ export class Api {
     return this._timeTablesApi;
   }
 
+  get signupApi(): SignupApi {
+    return this._signupApi;
+  }
+
   get departmentApi(): DepartmentApi {
     return this._departmentApi;
   }
 
+  get academicClassApi(): AcademicClassApi {
+    return this._academicClassApi;
   }
+}

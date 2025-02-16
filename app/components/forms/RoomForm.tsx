@@ -1,13 +1,13 @@
-import { useForm } from "react-hook-form";
-import { Room } from "@/app/types/types";
+import {useForm} from "react-hook-form";
+import {Room} from "@/app/types/types";
 
 type RoomFormProps = {
   onSubmit: (data: Room) => void;
   initialData?: Room;
 };
 
-const RoomForm = ({ onSubmit, initialData }: RoomFormProps) => {
-  const { register, handleSubmit, formState: { errors } } = useForm<Room>({
+const RoomForm = ({onSubmit, initialData}: RoomFormProps) => {
+  const {register, handleSubmit, formState: {errors}} = useForm<Room>({
     defaultValues: initialData,
   });
 
@@ -17,7 +17,7 @@ const RoomForm = ({ onSubmit, initialData }: RoomFormProps) => {
         <label className="block mb-1">Nom de la salle</label>
         <input
           type="text"
-          {...register("name", { required: "Champ obligatoire" })}
+          {...register("name", {required: "Champ obligatoire"})}
           className="w-full p-2 border rounded"
         />
         {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
@@ -27,7 +27,7 @@ const RoomForm = ({ onSubmit, initialData }: RoomFormProps) => {
         <label className="block mb-1">Capacité</label>
         <input
           type="number"
-          {...register("capacity", { required: "Champ obligatoire" })}
+          {...register("capacity", {required: "Champ obligatoire"})}
           className="w-full p-2 border rounded"
         />
         {errors.capacity && <p className="text-red-500 text-sm">{errors.capacity.message}</p>}

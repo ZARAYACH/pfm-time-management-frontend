@@ -1,40 +1,58 @@
 "use client"; // Indique que c'est un composant client
-import {use, useEffect, useState} from 'react';
-import { useRouter } from 'next/navigation';
-import RoomForm from '@/app/components/forms/RoomForm'; // Utilisez des alias pour les chemins
-import { Room } from '@/app/types/types';
+import {use, useCallback, useEffect, useState} from 'react';
+import {ClassRoomDto, DepartmentDto} from "@/app/openapi";
+import useApis from "@/app/contexts/ApiContext";
+import {SetField} from "@components/common/listingPage";
+import PageHeader from "@components/common/PageHeader";
+import {Button} from "@radix-ui/themes";
+import {useRouter} from "next/navigation";
+import ItemDetailsSkeleton from "@components/skeletons/itemPageSkeleton";
+import SaveClassRoom from "@/app/admin/rooms/SaveClassRoom";
 
-const RoomEditPage = ({params}: { params: Promise<{ id: string }> }) => {
+const ClassRoomEditPage = ({params}: { params: Promise<{ id: number }> }) => {
   const router = useRouter();
-  const [room, setRoom] = useState<Room | null>(null);
-  const props = use(params);
+  const [loading, setLoading] = useState(true);
+  const {id} = use(params);
+  const [classRoom, setClassRoom] = useState<ClassRoomDto>();
+
+  const {classRoomApi, departmentApi} = useApis()
+
+  const [departments, setDepartments] = useState<DepartmentDto[]>([]);
 
   useEffect(() => {
-    if (props.id) {
-      // Simulation de données en attendant le backend
-      const mockRooms: Room[] = [
-        { id: "1", name: "Salle A", capacity: 30, equipment: ["Projecteur", "Tableau"] },
-        { id: "2", name: "Salle B", capacity: 50, equipment: ["Ordinateurs"] },
-      ];
-      const foundRoom = mockRooms.find(r => r.id === props.id);
-      setRoom(foundRoom || null);
+    departmentApi.listDepartment().then(value => setDepartments(value));
+  }, [departmentApi]);
+
+  const setField = useCallback<SetField<ClassRoomDto>>((field, value) => {
+    setClassRoom(prev => prev ? ({...prev, [field]: value}) : undefined)
+  }, [])
+
+  const updateCourse = useCallback(() => {
+    if (!classRoom?.id) {
+      return;
     }
-  }, [props.id]);
+    classRoomApi.modifyClassRoom({
+      id: classRoom.id,
+      classRoomDto: classRoom
+    }).then(() => router.push('/admin/rooms'))
+  }, [classRoom, classRoomApi, router])
 
-  const handleSubmit = async (data: Room) => {
-    await fetch(`/api/rooms/${props.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
-    router.push('/admin/rooms');
-  };
+  useEffect(() => {
+    classRoomApi.findClassRoomById({id: id}).then(classroom => {
+      setClassRoom(classroom)
+    }).then(() => setLoading(false))
+  }, [classRoomApi, departmentApi, id])
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Éditer la Salle</h1>
-      {room && <RoomForm onSubmit={handleSubmit} initialData={room} />}
+  return loading ? <ItemDetailsSkeleton/> : <div className="rounded-md p-6 bg-white shadow-md">
+    <PageHeader title={`Edit department`}/>
+    {
+      classRoom && <SaveClassRoom departments={departments} editMode={true} selected={classRoom} setField={setField}/>
+    }
+    <div className="flex justify-end gap-3 mt-4">
+      <Button onClick={() => router.push('/admin/rooms')} variant="soft"
+              color="gray">Cancel</Button>
+      <Button onClick={() => updateCourse()}> Edit</Button>
     </div>
-  );
-};
-
-export default RoomEditPage;
+  </div>
+}
+export default ClassRoomEditPage;

@@ -4,13 +4,13 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
-import { EventInput } from '@fullcalendar/core';
+import {EventInput} from '@fullcalendar/core';
 
 type TimetableCalendarProps = {
   events?: EventInput[];
 };
 
-const TimetableCalendar = ({ events }: TimetableCalendarProps) => {
+const TimetableCalendar = ({events}: TimetableCalendarProps) => {
   return (
     <FullCalendar
       plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}

@@ -1,40 +1,57 @@
 "use client"; // Indique que c'est un composant client
-import {use, useEffect, useState} from 'react';
-import {useRouter} from 'next/navigation';
-import ModuleForm from '@/app/components/forms/ModuleForm';
-import {Module} from '@/app/types/types';
+import {use, useCallback, useEffect, useState} from 'react';
+import {CourseDto} from "@/app/openapi";
+import useApis from "@/app/contexts/ApiContext";
+import {SetField} from "@components/common/listingPage";
+import PageHeader from "@components/common/PageHeader";
+import {Button} from "@radix-ui/themes";
+import {useRouter} from "next/navigation";
+import ItemDetailsSkeleton from "@components/skeletons/itemPageSkeleton";
+import SaveCourse from "@/app/admin/modules/SaveCourse";
 
 
-const ModuleEditPage = ({params}: { params: Promise<{ id: string }> }) => {
+const ModuleEditPage = ({params}: { params: Promise<{ id: number }> }) => {
   const router = useRouter();
-  const [module, setModule] = useState<Module | null>(null);
-  const props = use(params);
-  useEffect(() => {
-    if (props.id) {
-      // Simulation de données en attendant le backend
-      const mockModules: Module[] = [
-        {id: 1, name: "Mathématiques", semester: "S1"},
-        {id: 2, name: "Physique", semester: "S2"},
-      ];
-      const foundModule = mockModules.find(m => m.id === Number(props.id));
-      setModule(foundModule || null);
+  const [loading, setLoading] = useState(true);
+  const {id} = use(params);
+  const [course, setCourse] = useState<CourseDto>();
+
+  const {courseApi} = useApis()
+
+  const setField = useCallback<SetField<CourseDto>>((field, value) => {
+    setCourse(prev => prev ? ({...prev, [field]: value}) : undefined)
+  }, [])
+
+  const updateCourse = useCallback(() => {
+    if (!course?.id) {
+      return;
     }
-  }, [props.id]);
+    courseApi.modifyCourse({
+      id: course.id,
+      courseDto: {
+        id: course?.id,
+        name: course.name,
+        classRoomType: course.classRoomType,
+      }
+    }).then(() => router.push('/admin/modules'))
+  }, [courseApi, course, router])
 
-  const handleSubmit = async (data: Module) => {
-    await fetch(`/api/modules/${props.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
-    router.push('/admin/modules');
-  };
+  useEffect(() => {
+    courseApi.findCourseById({id: id}).then(course => {
+      setCourse(course)
+    }).then(() => setLoading(false))
+  }, [courseApi, id, course?.id])
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Éditer le Module</h1>
-      {module && <ModuleForm onSubmit={handleSubmit} initialData={module}/>}
+  return loading ? <ItemDetailsSkeleton/> : <div className="rounded-md p-6 bg-white shadow-md">
+    <PageHeader title={`Edit course`}/>
+    {
+      course && <SaveCourse editMode={true} selected={course} setField={setField}/>
+    }
+    <div className="flex justify-end gap-3 mt-4">
+      <Button onClick={() => router.push('/admin/modules')} variant="soft"
+              color="gray">Cancel</Button>
+      <Button onClick={() => updateCourse()}> Edit</Button>
     </div>
-  );
-};
-
+  </div>
+}
 export default ModuleEditPage;

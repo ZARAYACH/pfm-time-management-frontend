@@ -12,7 +12,7 @@ const TeachersPage = () => {
 
   // Données mockées (en attendant le backend)
   useEffect(() => {
-    usersApi.list().then((res) => {
+    usersApi.listUsers().then((res) => {
       setTeachers(res);
       setLoading(false);
     })

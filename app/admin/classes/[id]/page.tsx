@@ -56,7 +56,7 @@ const AcademicClassEditPage = ({params}: { params: Promise<{ id: number }> }) =>
   }, [academicClassApi, id])
 
   return loading ? <ItemDetailsSkeleton/> : <div className="rounded-md p-6 bg-white shadow-md">
-    <PageHeader title={`Edit department`}/>
+    <PageHeader title={`Edit Academic class`}/>
     {
       academicClass &&
         <SaveAcademicClass semesters={semesters} groups={groups} teachers={users} editMode={true}

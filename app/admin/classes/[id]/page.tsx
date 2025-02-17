@@ -39,15 +39,9 @@ const AcademicClassEditPage = ({params}: { params: Promise<{ id: number }> }) =>
     }
     academicClassApi.modifyAcademicClass({
       id: academicClass.id,
-      academicClassDto: {
-        id: academicClass?.id,
-        courseId: academicClass.courseId,
-        teacherId: academicClass.teacherId,
-        semesterId: academicClass.semesterId,
-        groupId: academicClass.groupId,
-      }
+      academicClassDto: academicClass
     }).then(() => router.push('/admin/classes'))
-  }, [academicClass?.courseId, academicClass?.groupId, academicClass?.id, academicClass?.semesterId, academicClass?.teacherId, academicClassApi, router])
+  }, [academicClass, academicClassApi, router])
 
   useEffect(() => {
     academicClassApi.findAcademicClassById({id: id}).then(department => {

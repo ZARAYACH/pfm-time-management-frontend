@@ -24,7 +24,6 @@ export default async function middleware(req: NextRequest) {
   if (currentPath == "/auth/login" && decodedToken) {
     return NextResponse.redirect(new URL(getDashboardUrl((decodedToken.ROLES as string[])?.[0]), req.nextUrl.origin));
   }
-
   if (
     currentPath.startsWith("/_next/") ||
     currentPath.startsWith("/static/") ||

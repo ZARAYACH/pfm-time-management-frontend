@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   }, [statisticsApi])
 
   const stats = useMemo(() => [
-    {title: "Nombre d'enseignants", metric: statistics?.teachers, link: "/admin/teachers"},
+    {title: "Nombre d'enseignants", metric: statistics?.teachers, link: "/admin/users"},
     {title: "Nombre de salles", metric: statistics.classrooms, link: "/admin/rooms"},
     {title: "Nombre de modules", metric: statistics.courses, link: "/admin/modules"},
     {title: "Étudiants inscrits", metric: statistics.students, link: "/admin/users"},

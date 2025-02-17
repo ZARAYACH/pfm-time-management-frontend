@@ -1,21 +1,23 @@
 "use client";
 import {useEffect, useState} from 'react';
 import useApis from "@/app/contexts/ApiContext";
-import {SemesterDto, TimeTableDto} from "@/app/openapi";
+import {AcademicClassDto, SemesterDto, TimeTableDto} from "@/app/openapi";
 import {Select, Text} from "@radix-ui/themes";
 import Timetable from "@components/common/TimeTable";
 
 const TeacherTimetable = () => {
-  const {timeTablesApi, semesterApi} = useApis();
+  const {timeTablesApi, semesterApi, academicClassApi} = useApis();
   const [timetables, setTimetables] = useState<TimeTableDto[]>([]);
   const [semesters, setSemesters] = useState<SemesterDto[]>([]);
   const [selectedSemester, setSelectedSemester] = useState<SemesterDto>();
+  const [academicClasses, setAcademicClasses] = useState<AcademicClassDto[]>([]);
 
   useEffect(() => {
     timeTablesApi.getTeacherTimetable().then(value => setTimetables(value));
+    academicClassApi.listAcademicClass().then(value => setAcademicClasses(value));
     semesterApi.listSemester().then(value => setSemesters(value));
-  }, [semesterApi, timeTablesApi]);
-
+  }, [academicClassApi, semesterApi, timeTablesApi]);
+  console.log(academicClasses)
   return (
     <div className="p-6">
       <Text as="div" size="2" mb="1" weight="bold">Semester</Text>
@@ -31,8 +33,8 @@ const TeacherTimetable = () => {
       </Select.Root>
 
       <h1 className="text-2xl font-bold mb-6">Mon Emploi du Temps</h1>
-      <Timetable
-        timetable={selectedSemester ? timetables.find(value => value.semesterId == selectedSemester?.id) : timetables.find(value => value.semesterId == semesters?.[0].id)}/>
+      {timetables && <Timetable academicClasses={academicClasses}
+                                timetable={selectedSemester ? timetables.find(value => value.semesterId == selectedSemester?.id) : timetables.find(value => value.semesterId == semesters?.[0].id)}/>}
     </div>
   );
 };

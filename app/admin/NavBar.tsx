@@ -52,7 +52,7 @@ const NavBar = () => {
       <div className="flex items-center justify-between p-3">
         {!collapsed && (
           <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
-            {!collapsed && <Text weight={"bold"} className={"ml-4"}>Time Management</Text>}
+            {!collapsed && <Text weight={"bold"} className={"ml-4"}>TimePlanner</Text>}
           </a>
         )}
         <div className={`flex items-center justify-center ${collapsed ? '' : 'hidden'}`}></div>

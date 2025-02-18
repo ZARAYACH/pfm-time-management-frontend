@@ -17,7 +17,7 @@ const TeacherTimetable = () => {
     academicClassApi.listAcademicClass().then(value => setAcademicClasses(value));
     semesterApi.listSemester().then(value => setSemesters(value));
   }, [academicClassApi, semesterApi, timeTablesApi]);
-  console.log(academicClasses)
+  
   return (
     <div className="p-6">
       <Text as="div" size="2" mb="1" weight="bold">Semester</Text>

@@ -34,7 +34,9 @@ const TeacherTimetable = () => {
 
       <h1 className="text-2xl font-bold mb-6">Mon Emploi du Temps</h1>
       {timetables && <Timetable academicClasses={academicClasses}
-                                timetable={selectedSemester ? timetables.find(value => value.semesterId == selectedSemester?.id) : timetables.find(value => value.semesterId == semesters?.[0].id)}/>}
+                                timetable={selectedSemester ?
+                                  timetables.find(value => value.semesterId == selectedSemester?.id) :
+                                  timetables.find(value => value.semesterId == semesters?.[0].id)}/>}
     </div>
   );
 };

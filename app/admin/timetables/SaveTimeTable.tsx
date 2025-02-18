@@ -32,7 +32,8 @@ export default function SaveTimeTable({
                                         groups = [],
                                         semesters = [],
                                         classRooms = [],
-                                        setField
+                                        setField,
+                                        editMode = false,
                                       }: SaveAcademicClassProps) {
   const {timeTablesApi} = useApis();
   const [days, setDays] = useState<{ [key: string]: Day }>(selected?.days ?? {});
@@ -41,7 +42,6 @@ export default function SaveTimeTable({
   const [selectedAcademicClass, setSelectedAcademicClass] = useState<AcademicClassDto | null>();
   const [selectedClassRoom, setSelectedClassRoom] = useState<ClassRoomDto | null>();
   const [timeSlotsOrder, setTimeSlotsOrder] = useState<SlotDto[]>([]);
-
 
   useEffect(() => {
     timeTablesApi.getTimeSlots().then(value => setTimeSlotsOrder(value))
@@ -61,7 +61,7 @@ export default function SaveTimeTable({
           ...(prev[selectedDay]?.timeSlots || {}),
           [selectedTimeSlot]: {
             classRoomId: Number(selectedClassRoom?.id),
-            academicClassId: Number(selectedClassRoom?.id),
+            academicClassId: Number(selectedAcademicClass?.id),
           },
         },
       },
@@ -74,7 +74,6 @@ export default function SaveTimeTable({
     setDays((prev) => {
       const updatedSlots = {...prev[day]?.timeSlots};
       delete updatedSlots[slot];
-
       return {
         ...prev,
         [day]: {timeSlots: updatedSlots},
@@ -87,13 +86,12 @@ export default function SaveTimeTable({
   const handleClassRoomChange = (id: string) => {
     setSelectedClassRoom(classRooms.find(value => value.id == Number(id)));
   };
-
   return <div className="flex flex-col gap-3">
     <div className="flex gap-3">
-      <label className="w-full">
+      <div className="w-full">
         <label className="flex my-3 flex-col">
           <Text size="2" weight="bold">Semesters</Text>
-          <Select.Root value={String(selected?.semesterId)}
+          <Select.Root disabled={!editMode} value={String(selected?.semesterId)}
                        onValueChange={(value) => setField("semesterId", Number(value))}>
             <Select.Trigger/>
             <Select.Content>
@@ -105,7 +103,7 @@ export default function SaveTimeTable({
         </label>
         <label className="flex flex-col">
           <Text size="2" weight="bold">Group</Text>
-          <Select.Root value={String(selected?.groupId)}
+          <Select.Root disabled={!editMode} value={String(selected?.groupId)}
                        onValueChange={(value) => setField("groupId", Number(value))}>
             <Select.Trigger/>
             <Select.Content>
@@ -147,10 +145,11 @@ export default function SaveTimeTable({
             <Select.Root value={String(selectedAcademicClass?.id)} onValueChange={handleAcademicClassChange}>
               <Select.Trigger/>
               <Select.Content>
-                {classes.filter(value => value.semesterId == selected?.semesterId && value.groupId == selected.groupId).length > 0 ?
-                  classes.filter(value => value.semesterId == selected?.semesterId && value.groupId == selected.groupId).map((academicClass, index) => (
+                {classes.filter(value => value.semesterId == selected?.semesterId && value.groupId == selected?.groupId).length > 0 ?
+                  classes.filter(value => value.semesterId == selected?.semesterId && value.groupId == selected?.groupId)
+                    .map((academicClass, index) => (
                     <Select.Item key={index}
-                                 value={String(academicClass.id)}>{'Course ' + courses.find(value => value.id == academicClass.courseId)?.name +
+                                 value={String(academicClass.id)}>{'Academic class id '+ academicClass.id + ' Course ' + courses.find(value => value.id == academicClass.courseId)?.name +
                       ', group ' + groups.find(value => value.id == academicClass.groupId)?.name +
                       ", Semester " + semesters.find(value => value.id == academicClass.semesterId)?.year}</Select.Item>
                   )) : <Select.Item value={"0"}>No class</Select.Item>}
@@ -189,9 +188,9 @@ export default function SaveTimeTable({
                       ', number ' + classRooms.find(value => value.id == info.classRoomId)?.classNumber} </Text>
                     <Text as="div"
                           size="2">Class #{info.academicClassId}: {'Course ' +
-                      courses.find(value => value.id == classes.find(value1 => value1.id == info.classRoomId)?.courseId)?.name +
-                      ', group ' + groups.find(value => value.id == classes.find(value1 => value1.id == info.classRoomId)?.groupId)?.name +
-                      ", Semester " + semesters.find(value => value.id == classes.find(value1 => value1.id == info.classRoomId)?.semesterId)?.year}</Text>
+                      classes.find(value1 => value1.id == info.academicClassId)?.courseName +
+                      ', group ' + classes.find(value1 => value1.id == info.academicClassId)?.courseName +
+                      ", Semester " + semesters.find(value => value.id == classes.find(value1 => value1.id == info.academicClassId)?.semesterId)?.year + ' ' + semesters.find(value => value.id == classes.find(value1 => value1.id == info.academicClassId)?.semesterId)?.type }</Text>
                     <Button variant="soft" color="red" onClick={() => handleRemoveTimeSlot(day, slot)}>Remove</Button>
                   </div>
                 ))}
@@ -201,7 +200,7 @@ export default function SaveTimeTable({
             )}
           </Card>
         ))}
-      </label>
+      </div>
     </div>
   </div>
     ;

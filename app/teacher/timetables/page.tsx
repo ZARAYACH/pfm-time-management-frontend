@@ -17,7 +17,7 @@ const TeacherTimetable = () => {
     academicClassApi.listAcademicClass().then(value => setAcademicClasses(value));
     semesterApi.listSemester().then(value => setSemesters(value));
   }, [academicClassApi, semesterApi, timeTablesApi]);
-  console.log(academicClasses)
+  
   return (
     <div className="p-6">
       <Text as="div" size="2" mb="1" weight="bold">Semester</Text>
@@ -34,7 +34,9 @@ const TeacherTimetable = () => {
 
       <h1 className="text-2xl font-bold mb-6">Mon Emploi du Temps</h1>
       {timetables && <Timetable academicClasses={academicClasses}
-                                timetable={selectedSemester ? timetables.find(value => value.semesterId == selectedSemester?.id) : timetables.find(value => value.semesterId == semesters?.[0].id)}/>}
+                                timetable={selectedSemester ?
+                                  timetables.find(value => value.semesterId == selectedSemester?.id) :
+                                  timetables.find(value => value.semesterId == semesters?.[0].id)}/>}
     </div>
   );
 };

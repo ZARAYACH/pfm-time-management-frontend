@@ -9,7 +9,7 @@ import {
   ReservationsApi,
   SemesterApi,
   SignupApi,
-  StatisticsApi,
+  StatisticsApi, TeachersApi,
   TimeTablesApi,
   TokensApi,
   UsersApi
@@ -20,6 +20,7 @@ import {ExceptionDto} from "@/app/openapi";
 
 
 export class Api {
+
   private readonly _usersApi: UsersApi;
   private readonly _authenticationApi: AuthenticationApi;
   private readonly _tokensApi: TokensApi;
@@ -34,6 +35,8 @@ export class Api {
   private readonly _signupApi: SignupApi
   private readonly _reservationApi: ReservationsApi
   private readonly _statisticsApi: StatisticsApi
+  private readonly _teachersApi: TeachersApi;
+
   private _conf = new Configuration({
     credentials: 'include',
     middleware: [{
@@ -71,6 +74,7 @@ export class Api {
     this._academicClassApi = new AcademicClassApi(this.configuration)
     this._reservationApi = new ReservationsApi(this.configuration);
     this._statisticsApi = new StatisticsApi(this.configuration);
+    this._teachersApi = new TeachersApi(this.configuration);
   }
 
   get statisticsApi(): StatisticsApi {
@@ -132,5 +136,8 @@ export class Api {
 
   get academicClassApi(): AcademicClassApi {
     return this._academicClassApi;
+  }
+  get teachersApi(): TeachersApi {
+    return this._teachersApi;
   }
 }

@@ -16,13 +16,13 @@ const DepartmentEditPage = ({params}: { params: Promise<{ id: number }> }) => {
   const {id} = use(params);
   const [department, setDepartment] = useState<DepartmentDto>();
 
-  const {usersApi, departmentApi} = useApis()
+  const {teachersApi, departmentApi} = useApis()
 
   const [users, setUsers] = useState<UserDto[]>([]);
 
   useEffect(() => {
-    usersApi.listUsers().then(value => setUsers(value));
-  }, [usersApi]);
+    teachersApi.listTeachers().then(value => setUsers(value));
+  }, [teachersApi]);
 
   const setField = useCallback<SetField<DepartmentDto>>((field, value) => {
     setDepartment(prev => prev ? ({...prev, [field]: value}) : undefined)

@@ -18,7 +18,7 @@ const defaultAcademicClass: AcademicClassDto = {
 };
 
 const AcademicClassPage = () => {
-  const {courseApi, groupApi, semesterApi, usersApi, academicClassApi} = useApis();
+  const {courseApi, groupApi, semesterApi, teachersApi, academicClassApi} = useApis();
 
   const [users, setUsers] = useState<UserDto[]>([]);
   const [groups, setGroups] = useState<GroupDto[]>([]);
@@ -27,11 +27,11 @@ const AcademicClassPage = () => {
 
 
   useEffect(() => {
-    usersApi.listUsers().then(value => setUsers(value));
+    teachersApi.listTeachers().then(value => setUsers(value));
     groupApi.listGroup().then(value => setGroups(value));
     courseApi.listCourse().then(value => setCourses(value));
     semesterApi.listSemester().then(value => setSemeters(value));
-  }, [courseApi, groupApi, semesterApi, usersApi]);
+  }, [courseApi, groupApi, semesterApi, teachersApi]);
 
   const SaveComponent = useCallback((props: SaveComponentProps<AcademicClassDto>) => <SaveAcademicClass teachers={users}
                                                                                                         courses={courses}

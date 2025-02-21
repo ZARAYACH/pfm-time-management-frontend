@@ -1,15 +1,15 @@
 "use client"
-import {useMemo} from "react";
+import React, {useMemo} from "react";
 import useApis from "@/app/contexts/ApiContext";
 import {SemesterDto} from "@/app/openapi";
 import {ColumnDef} from "@tanstack/table-core";
 import ListingPage, {SaveComponentProps} from "@components/common/listingPage";
 import SaveSemester from "@/app/admin/semesters/SaveSemester";
+import {useRouter} from "next/navigation";
+import {toast} from "react-toastify";
 import {IconButton} from "@radix-ui/themes";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCalendar, faRefresh} from "@fortawesome/free-solid-svg-icons";
-import {useRouter} from "next/navigation";
-import {toast} from "react-toastify";
 
 const defaultSemester: SemesterDto = {id: 0, type: "FALL", year: new Date().getFullYear()};
 
@@ -52,6 +52,51 @@ const ModulesPage = () => {
       .then(() => router.push("/admin/reservations"))
   }
 
+  //
+  // const downloadTimetables = useCallback(async (item: SemesterDto) => {
+  //   await timeTablesApi.listTimeTables({semesterId: item.id})
+  //     .then(timetables =>  generateHTMLTimetables(timetables))
+  // }, [generateHTMLTimetables, timeTablesApi]);
+  //
+  // const generateHTMLTimetables = useCallback((timetables: TimeTableDto[]) => {
+  //   if (!timetables) return "<p>No timetable available</p>";
+  //   const html = `
+  //       <html lang="en">
+  //       <head>
+  //           <title>Des Emploi de temps </title>
+  //       </head>
+  //       <body>
+  //       ${timetables.map(timetable => {
+  //     return `<br/><br/><h2>Emploi du temps - ${timetable.groupName}</h2>
+  //     <p>Generated on: ${new Date().toLocaleDateString()}</p>
+  //     ${Timetable({timetable, academicClasses})}`
+  //   })}
+  //       </body>
+  //       </html>
+  //   `;
+  //   downloadPDF(html);
+  // }, [academicClasses]);
+  //
+  // const downloadPDF = (html: string) => {
+  //   try {
+  //     const pdf = new jsPDF("portrait", "mm", "a4");
+  //     pdf.setFontSize(18);
+  //     pdf.text(`des Emplois du temps} `, 105, 20, {align: "center"});
+  //     pdf.setFontSize(12);
+  //     pdf.text(`Généré le ${new Date().toLocaleDateString()}`, 105, 30, {align: "center"});
+  //
+  //     const timetableHTML = html;
+  //     pdf.html(timetableHTML, {
+  //       callback: function (doc) {
+  //         doc.save(`des emploi du temps.pdf`);
+  //       },
+  //     });
+  //   } catch (error) {
+  //     console.error("Erreur génération PDF:", error);
+  //     alert("Erreur lors de l'export !");
+  //   }
+  // };
+
   return (
     <div className="p-6">
       <ListingPage<SemesterDto>
@@ -77,6 +122,11 @@ const ModulesPage = () => {
                   <FontAwesomeIcon icon={faRefresh}/>
                 </IconButton>
               </div>
+              {/*<div className="flex gap-2">*/}
+              {/*  <IconButton onClick={() => (item)} variant="soft" className="mr-2">*/}
+              {/*    <FontAwesomeIcon icon={faRefresh}/>*/}
+              {/*  </IconButton>*/}
+              {/*</div>*/}
             </div>
           )}
       </ListingPage>

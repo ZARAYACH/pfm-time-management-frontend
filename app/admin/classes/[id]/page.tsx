@@ -1,6 +1,6 @@
 "use client"; // Indique que c'est un composant client
 import {use, useCallback, useEffect, useState} from 'react';
-import {AcademicClassDto, CourseDto, GroupDto, SemesterDto, UserDto} from "@/app/openapi";
+import {AcademicClassDto, CourseDto, GroupDto, SemesterDto, TeacherDto} from "@/app/openapi";
 import useApis from "@/app/contexts/ApiContext";
 import {SetField} from "@components/common/listingPage";
 import PageHeader from "@components/common/PageHeader";
@@ -14,20 +14,20 @@ const AcademicClassEditPage = ({params}: { params: Promise<{ id: number }> }) =>
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const {id} = use(params);
-  const [users, setUsers] = useState<UserDto[]>([]);
+  const [users, setUsers] = useState<TeacherDto[]>([]);
   const [groups, setGroups] = useState<GroupDto[]>([]);
   const [semesters, setSemeters] = useState<SemesterDto[]>([]);
   const [courses, setCourses] = useState<CourseDto[]>([]);
   const [academicClass, setAcademicClass] = useState<AcademicClassDto>();
 
-  const {courseApi, groupApi, semesterApi, usersApi, academicClassApi} = useApis();
+  const {courseApi, groupApi, semesterApi, teachersApi, academicClassApi} = useApis();
 
   useEffect(() => {
-    usersApi.listUsers().then(value => setUsers(value));
+    teachersApi.listTeachers().then(value => setUsers(value));
     groupApi.listGroup().then(value => setGroups(value));
     courseApi.listCourse().then(value => setCourses(value));
     semesterApi.listSemester().then(value => setSemeters(value));
-  }, [courseApi, groupApi, semesterApi, setUsers, usersApi]);
+  }, [courseApi, groupApi, semesterApi, setUsers, teachersApi]);
 
   const setField = useCallback<SetField<AcademicClassDto>>((field, value) => {
     setAcademicClass(prev => prev ? ({...prev, [field]: value}) : undefined)

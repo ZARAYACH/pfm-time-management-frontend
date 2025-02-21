@@ -1,7 +1,7 @@
 "use client"
 import {useCallback, useEffect, useMemo, useState} from "react";
 import useApis from "@/app/contexts/ApiContext";
-import {DepartmentDto, UserDto} from "@/app/openapi";
+import {DepartmentDto, TeacherDto} from "@/app/openapi";
 import {ColumnDef} from "@tanstack/table-core";
 import ListingPage, {SaveComponentProps} from "@components/common/listingPage";
 import SaveDepartment from "@/app/admin/departments/SaveDepartment";
@@ -10,13 +10,13 @@ const defaultDepartment: DepartmentDto = {id: 0, name: '', chiefId: 0};
 
 
 const DepartmentPage = () => {
-  const {departmentApi, usersApi} = useApis();
+  const {departmentApi, teachersApi} = useApis();
 
-  const [users, setUsers] = useState<UserDto[]>([]);
+  const [users, setUsers] = useState<TeacherDto[]>([]);
 
   useEffect(() => {
-    usersApi.listUsers().then(value => setUsers(value));
-  }, [usersApi]);
+    teachersApi.listTeachers().then(value => setUsers(value));
+  }, [teachersApi]);
 
   const SaveComponent = useCallback((props: SaveComponentProps<DepartmentDto>) => <SaveDepartment users={users}
                                                                                                   selected={defaultDepartment}
